@@ -637,30 +637,30 @@ class CodeSnifferShell extends AppShell {
 
 		if ($this->params['fix']) {
 			if (file_exists($diffFile) === false) {
-		    // Nothing to fix.
-		    if ($numErrors === 0) {
-		        // And no errors reported.
-		        $exit = 0;
-		    } else {
-		        // Errors we can't fix.
-		        $exit = 2;
-		    }
+				// Nothing to fix.
+				if ($numErrors === 0) {
+					// And no errors reported.
+					$exit = 0;
+				} else {
+					// Errors we can't fix.
+					$exit = 2;
+				}
 			} else {
-		    $cmd = "patch -p0 -ui \"$diffFile\"";
-		    $output = array();
-		    $retVal = null;
-		    exec($cmd, $output, $retVal);
-		    //unlink($diffFile);
+				$cmd = "patch -p0 -ui \"$diffFile\"";
+				$output = array();
+				$retVal = null;
+				exec($cmd, $output, $retVal);
+				//unlink($diffFile);
 
-		    if ($retVal === 0) {
-		        // Everything went well.
-		        $filesPatched = count($output);
-		        echo "Patched $filesPatched files\n";
-		        $exit = 1;
-		    } else {
-		        print_r($output);
-		        echo "Returned: $retVal\n";
-		        $exit = 3;
+				if ($retVal === 0) {
+					// Everything went well.
+					$filesPatched = count($output);
+					echo "Patched $filesPatched files\n";
+					$exit = 1;
+				} else {
+					print_r($output);
+					echo "Returned: $retVal\n";
+					$exit = 3;
 				}
 			}
 		}
