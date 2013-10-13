@@ -60,7 +60,7 @@ class MyCakePHP_Sniffs_ControlStructures_ConditionalExpressionOrderSniff impleme
 			return;
 		}
 
-		$error = 'Usage of Yoda conditions is not adviced. Please switch the expression order.';
+		$error = 'Usage of Yoda conditions is not advised. Please switch the expression order.';
 		$phpcsFile->addFixableError($error, $stackPtr, 'ExpressionOrder');
 
 		// Fix the error
