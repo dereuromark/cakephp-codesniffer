@@ -141,7 +141,12 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 		if ($foundLines !== 1) {
 			$error = 'Expected 1 blank lines before function; %s found';
 			$data = array($foundLines);
-			$phpcsFile->addError($error, $stackPtr, 'Before', $data);
+			$phpcsFile->addFixableError($error, $stackPtr, 'Before', $data);
+			if ($phpcsFile->fixer->enabled === true) {
+				// Assumes that all functions will be at least tabbed once
+				// and never against the left wall.
+				$phpcsFile->fixer->addNewlineBefore($stackPtr - 1);
+			}
 		}
 	}
 
