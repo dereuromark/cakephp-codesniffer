@@ -62,8 +62,40 @@ class MyCakePHP_Sniffs_PHP_IsNullSniff implements PHP_CodeSniffer_Sniff {
 			return;
 		}
 
+		// Unless we compare it to true/false, then we can simplify
 		$nextToken = $phpcsFile->findNext(T_WHITESPACE, ($closeToken + 1), null, true);
 		if (in_array($tokens[$nextToken]['code'], $comparisonOperators)) {
+			$argument = $phpcsFile->findNext(T_WHITESPACE, ($nextToken + 1), null, true);
+			if (!in_array($tokens[$argument]['code'], array(T_TRUE, T_FALSE))) {
+				return;
+			}
+
+			$positive = $tokens[$argument]['code'] === T_TRUE;
+
+			// Double negation? Skip for now
+			if ($previousToken && $tokens[$previousToken]['code'] === T_BOOLEAN_NOT) {
+				return;
+			}
+
+			$comparison = $positive ? '===' : '!==';
+
+			$error = 'Usage of ' . $tokens[$stackPtr]['content'] . ' not allowed; use strict null check (' . $comparison . ' null) instead';
+			$phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
+
+			// Fix the error
+			if ($phpcsFile->fixer->enabled === true) {
+				$phpcsFile->fixer->beginChangeset();
+				for ($i = $stackPtr; $i <= $openToken; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+
+				$phpcsFile->fixer->replaceToken($closeToken, ' ' . $comparison . ' null');
+				$phpcsFile->fixer->replaceToken($closeToken, ' ' . $comparison . ' null');
+				for ($i = $closeToken + 1; $i <= $argument; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
+				}
+				$phpcsFile->fixer->endChangeset();
+			}
 			return;
 		}
 
