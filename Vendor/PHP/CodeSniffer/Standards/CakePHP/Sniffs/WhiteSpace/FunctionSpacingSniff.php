@@ -62,7 +62,7 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 			}
 		}
 
-		if (is_null($nextLineToken) === true) {
+		if ($nextLineToken === null) {
 			// Never found the next line, which means
 			// there are 0 blank lines after the function.
 			$foundLines = 0;
@@ -112,7 +112,7 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 			}
 		}
 
-		if (is_null($prevLineToken) === true) {
+		if ($prevLineToken === null) {
 			// Never found the previous line, which means
 			// there are 0 blank lines before the function.
 			$foundLines = 0;
@@ -166,8 +166,18 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 			$phpcsFile->addFixableError($error, $stackPtr, 'Before', $data);
 			if ($phpcsFile->fixer->enabled === true) {
 				// Find the first token in this line
-				$token = $stackPtr;
-				while($tokens[$stackPtr]['line'] === $tokens[$token]['line']) {
+				$pointer = $stackPtr;
+
+				// Check that there is no doc block in between
+				if (isset($prevContent)) {
+					$comment = $phpcsFile->findNext(array(T_DOC_COMMENT), $prevContent, $stackPtr);
+					if ($comment) {
+						$pointer = $comment;
+					}
+				}
+
+				$token = $pointer;
+				while($tokens[$pointer]['line'] === $tokens[$token]['line']) {
 					$token--;
 				}
 				$phpcsFile->fixer->addNewlineBefore($token);
