@@ -1,7 +1,6 @@
 <?php
 
 $apples = 'oranges';
-
 function beakman() {
 	echo 'is awesome!';
 }
@@ -9,7 +8,6 @@ function beakman() {
 function derEuroMark() {
 	echo 'is more awesome!';
 }
-
 function derEuroBeakman() {
 	echo 'is the best!';
 }
@@ -17,7 +15,6 @@ function derEuroBeakman() {
 class Foo {
 
 	public $var = 'var';
-
 	public function someMethod() {
 		echo 'I am public';
 	}
@@ -25,7 +22,6 @@ class Foo {
 	function anotherOne() {
 		echo 'I am nothing';
 	}
-
 	protected function _aThird() {
 		echo 'I am protected';
 	}
@@ -45,7 +41,6 @@ class Foo {
 	/**
 	 * @return void
 	 */
-
 	public function two() {
 		echo 'Two';
 	}
