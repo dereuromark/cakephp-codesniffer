@@ -79,7 +79,22 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 		if ($foundLines !== 1) {
 			$error = 'Expected 1 blank lines after function; %s found';
 			$data = array($foundLines);
-			$phpcsFile->addError($error, $closer, 'After', $data);
+
+			if ($foundLines > 0) {
+				// Let another sniff worry about too many newlines
+				$phpcsFile->addError($error, $closer, 'After', $data);
+			} else {
+				$phpcsFile->addFixableError($error, $closer, 'After', $data);
+
+				if ($phpcsFile->fixer->enabled === true) {
+					// Find the first token in this line
+					$token = $nextContent;
+					while($tokens[$nextContent]['line'] === $tokens[$token]['line']) {
+						$token--;
+					}
+					$phpcsFile->fixer->addNewlineBefore($token);
+				}
+			}
 		}
 
 		/*
@@ -111,7 +126,7 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 			$prevLine = ($tokens[$prevContent]['line'] - 1);
 			$i = ($stackPtr - 1);
 			$foundLines = 0;
-			while ($currentLine != $prevLine && $currentLine > 1 && $i > 0) {
+			while ($currentLine !== $prevLine && $currentLine > 1 && $i > 0) {
 				if (isset($tokens[$i]['scope_condition']) === true) {
 					$scopeCondition = $tokens[$i]['scope_condition'];
 					if ($tokens[$scopeCondition]['code'] === T_FUNCTION) {
@@ -141,11 +156,21 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 		if ($foundLines !== 1) {
 			$error = 'Expected 1 blank lines before function; %s found';
 			$data = array($foundLines);
+
+			if ($foundLines > 0) {
+				// Let another sniff worry about too many newlines
+				$phpcsFile->addError($error, $stackPtr, 'Before', $data);
+				return;
+			}
+
 			$phpcsFile->addFixableError($error, $stackPtr, 'Before', $data);
 			if ($phpcsFile->fixer->enabled === true) {
-				// Assumes that all functions will be at least tabbed once
-				// and never against the left wall.
-				$phpcsFile->fixer->addNewlineBefore($stackPtr - 1);
+				// Find the first token in this line
+				$token = $stackPtr;
+				while($tokens[$stackPtr]['line'] === $tokens[$token]['line']) {
+					$token--;
+				}
+				$phpcsFile->fixer->addNewlineBefore($token);
 			}
 		}
 	}
