@@ -24,3 +24,11 @@ $y = !is_null($foo);
 if (!is_null($foo) || $something) {
 	//bla
 }
+
+if (!is_null($foo) === true) {
+	//bla
+}
+
+if (!is_null($foo) === false) {
+	//bla
+}

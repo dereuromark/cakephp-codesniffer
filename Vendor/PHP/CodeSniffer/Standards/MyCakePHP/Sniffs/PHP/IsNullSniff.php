@@ -66,18 +66,24 @@ class MyCakePHP_Sniffs_PHP_IsNullSniff implements PHP_CodeSniffer_Sniff {
 		$nextToken = $phpcsFile->findNext(T_WHITESPACE, ($closeToken + 1), null, true);
 		if (in_array($tokens[$nextToken]['code'], $comparisonOperators)) {
 			$argument = $phpcsFile->findNext(T_WHITESPACE, ($nextToken + 1), null, true);
-			if (!in_array($tokens[$argument]['code'], array(T_TRUE, T_FALSE))) {
-				return;
-			}
-
 			$positive = $tokens[$argument]['code'] === T_TRUE;
 
-			// Double negation? Skip for now
+			// Double negation? Nonsense usually, but OK
 			if ($previousToken && $tokens[$previousToken]['code'] === T_BOOLEAN_NOT) {
-				return;
+				$positive = !$positive;
 			}
 
 			$comparison = $positive ? '===' : '!==';
+
+			// Fix only if argument two is boolean
+			if (!in_array($tokens[$argument]['code'], array(T_TRUE, T_FALSE))) {
+				$error = 'Usage of ' . $tokens[$stackPtr]['content'] . ' not allowed; use strict null check (' . $comparison . ' null) instead';
+				$phpcsFile->addError($error, $stackPtr, 'NotAllowed');
+
+				//TODO: Try to fix this into (... = null) with parenthesis?
+				// is_null($one) === is_null($two) would become ($one === $two)
+				return;
+			}
 
 			$error = 'Usage of ' . $tokens[$stackPtr]['content'] . ' not allowed; use strict null check (' . $comparison . ' null) instead';
 			$phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
@@ -85,10 +91,13 @@ class MyCakePHP_Sniffs_PHP_IsNullSniff implements PHP_CodeSniffer_Sniff {
 			// Fix the error
 			if ($phpcsFile->fixer->enabled === true) {
 				$phpcsFile->fixer->beginChangeset();
+
+				if ($previousToken && $tokens[$previousToken]['code'] === T_BOOLEAN_NOT) {
+					$phpcsFile->fixer->replaceToken($previousToken, '');
+				}
 				for ($i = $stackPtr; $i <= $openToken; $i++) {
 					$phpcsFile->fixer->replaceToken($i, '');
 				}
-
 				$phpcsFile->fixer->replaceToken($closeToken, ' ' . $comparison . ' null');
 				$phpcsFile->fixer->replaceToken($closeToken, ' ' . $comparison . ' null');
 				for ($i = $closeToken + 1; $i <= $argument; $i++) {
