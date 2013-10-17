@@ -40,6 +40,7 @@
 	<rule ref="Squiz.Functions.FunctionDeclaration"/>
 	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie"/>
 	<rule ref="PEAR.Functions.ValidDefaultValue"/>
+	<rule ref="CakePHP.Functions.FunctionDeclarationArgumentSpacing"/>
 
 	<rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
 	<rule ref="PSR2.Namespaces.UseDeclaration"/>

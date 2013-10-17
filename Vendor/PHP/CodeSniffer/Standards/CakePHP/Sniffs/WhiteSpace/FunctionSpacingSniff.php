@@ -169,18 +169,17 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 				$pointer = $stackPtr;
 
 				// Check that there is no doc block in between
-				if (isset($prevContent)) {
+				if (!empty($prevContent)) {
 					$comment = $phpcsFile->findNext(array(T_DOC_COMMENT), $prevContent, $stackPtr);
 					if ($comment) {
 						$pointer = $comment;
 					}
 				}
-
 				$token = $pointer;
-				while($tokens[$pointer]['line'] === $tokens[$token]['line']) {
+				while ($tokens[$pointer]['line'] === $tokens[$token]['line']) {
 					$token--;
 				}
-				$phpcsFile->fixer->addNewlineBefore($token);
+				$phpcsFile->fixer->addNewlineBefore($token + 1);
 			}
 		}
 	}
