@@ -48,8 +48,33 @@ class Squiz_Sniffs_Scope_MemberVarScopeSniff extends PHP_CodeSniffer_Standards_A
 
         if (($modifier === false) || ($tokens[$modifier]['line'] !== $tokens[$stackPtr]['line'])) {
             $error = 'Scope modifier not specified for member variable "%s"';
+
+            $previous = $phpcsFile->findPrevious(array(T_WHITESPACE), $stackPtr - 1, null, true);
             $data  = array($tokens[$stackPtr]['content']);
-            $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
+
+            if ($previous && $tokens[$previous]['code'] === T_VAR) {
+                $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
+
+                if ($phpcsFile->fixer->enabled === true) {
+                    $visbility = 'public';
+                    $name = substr($tokens[$stackPtr]['content'], 1);
+                    $totalUnderscores = 0;
+                    while(strpos($name, '_') === 0) {
+                        $totalUnderscores++;
+                        $name = substr($name, 1);
+                    }
+                    if ($totalUnderscores > 1) {
+                        $visbility = 'private';
+                    } elseif ($totalUnderscores > 0) {
+                        $visbility = 'protected';
+                    }
+
+                    $phpcsFile->fixer->replaceToken($previous, $visbility);
+                }
+
+            } else {
+                $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
+            }
         }
 
     }//end processMemberVar()
