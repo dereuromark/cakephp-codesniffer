@@ -110,7 +110,7 @@ class CodeSnifferShell extends AppShell {
 		//$_SERVER['argv'][] = '--warning-severity=1';
 
 		if (!$customPath) {
-			$_SERVER['argv'][] = '--ignore=*/webroot/*,*/Vendor/*,*__*';
+			$_SERVER['argv'][] = '--ignore=*/webroot/*,*/Vendor/*,*/Plugin/*,*__*';
 		}
 
 		$ext = $this->ext;

@@ -55,10 +55,25 @@ class MyCakePHP_Sniffs_PHP_IsNullSniff implements PHP_CodeSniffer_Sniff {
 			return;
 		}
 
-		// If comparison operator before or after, we need to skip
-		$comparisonOperators = array(T_IS_NOT_IDENTICAL, T_IS_IDENTICAL);
+		// If comparison operator before or after, we just report for now
+		$comparisonOperators = array(T_IS_NOT_IDENTICAL, T_IS_IDENTICAL, T_IS_NOT_EQUAL, T_IS_EQUAL);
+
 		$previousToken = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
+		// Double negation? Nonsense usually, but OK
+		if ($previousToken && $tokens[$previousToken]['code'] === T_BOOLEAN_NOT) {
+			$previousTokenBefore = $phpcsFile->findPrevious(T_WHITESPACE, ($previousToken - 1), null, true);
+			if (in_array($tokens[$previousTokenBefore]['code'], $comparisonOperators)) {
+				$error = 'Usage of ' . $tokens[$stackPtr]['content'] . ' not allowed; use strict null check (' . '===' . ' null) instead';
+				$phpcsFile->addError($error, $stackPtr, 'NotAllowed');
+
+				return;
+			}
+		}
+
 		if (in_array($tokens[$previousToken]['code'], $comparisonOperators)) {
+			$error = 'Usage of ' . $tokens[$stackPtr]['content'] . ' not allowed; use strict null check (' . '===' . ' null) instead';
+			$phpcsFile->addError($error, $stackPtr, 'NotAllowed');
+
 			return;
 		}
 

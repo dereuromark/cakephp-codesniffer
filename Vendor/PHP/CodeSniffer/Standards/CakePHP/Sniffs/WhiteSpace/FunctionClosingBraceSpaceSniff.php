@@ -62,17 +62,20 @@ class CakePHP_Sniffs_WhiteSpace_FunctionClosingBraceSpaceSniff implements PHP_Co
 				$data = array($found);
 				$phpcsFile->addError($error, $closeBrace, 'SpacingBeforeNestedClose', $data);
 			}
-		} else {
-			if ($found !== 0) {
-				$error = 'Expected 0 blank lines before closing function brace; %s found';
-				$data = array($found);
-				$phpcsFile->addFixableError($error, $closeBrace, 'SpacingBeforeClose', $data);
-				if ($phpcsFile->fixer->enabled === true) {
-					$endOfContent = $prevContent + 1;
-					$lastWhiteSpace = $closeBrace - 2;
-					for ($i = $endOfContent; $i < $lastWhiteSpace; $i++) {
-						$phpcsFile->fixer->replaceToken($i, '');
-					}
+			return;
+		}
+		if ($found < 0) {
+			$error = 'Closing brace of nested function must be on a new line';
+			$phpcsFile->addError($error, $closeBrace, 'ContentBeforeClose');
+		} elseif ($found > 0) {
+			$error = 'Expected 0 blank lines before closing function brace; %s found';
+			$data = array($found);
+			$phpcsFile->addFixableError($error, $closeBrace, 'SpacingBeforeClose', $data);
+			if ($phpcsFile->fixer->enabled === true) {
+				$endOfContent = $prevContent + 1;
+				$lastWhiteSpace = $closeBrace - 2;
+				for ($i = $endOfContent; $i < $lastWhiteSpace; $i++) {
+					$phpcsFile->fixer->replaceToken($i, '');
 				}
 			}
 		}
