@@ -1,7 +1,7 @@
 <?php
 App::uses('AppShell', 'Console/Command');
 App::uses('FolderLib', 'Tools.Utility');
-App::uses('Xml', 'Utility');
+App::uses('Utility', 'Tools.Utility');
 App::uses('HttpSocket', 'Network/Http');
 
 if (!defined('WINDOWS')) {
@@ -37,15 +37,6 @@ class CodeSnifferShell extends AppShell {
 	 * Directory where CodeSniffer sniffs resides
 	 */
 	public $sniffsDir;
-
-	/**
-	 * Initialize CodeSnifferShell
-	 * + checks if CodeSniffer is installed and offer auto installation option.
-	 */
-	public function initialize() {
-
-		parent::initialize();
-	}
 
 	/**
 	 * Welcome message
@@ -110,7 +101,11 @@ class CodeSnifferShell extends AppShell {
 		//$_SERVER['argv'][] = '--warning-severity=1';
 
 		if (!$customPath) {
-			$_SERVER['argv'][] = '--ignore=*/webroot/*,*/Vendor/*,*/Plugin/*,*__*';
+			$ignored = '--ignore=*__*,*/webroot/*,*/Vendor/*';
+			if (empty($this->params['plugin'])) {
+				$ignored .= ',*/Plugin/*';
+			}
+			$_SERVER['argv'][] = $ignored;
 		}
 
 		$ext = $this->ext;
@@ -132,7 +127,7 @@ class CodeSnifferShell extends AppShell {
 		// as they decide if it is ok to print this data to screen.
 		@include_once 'PHP/Timer.php';
 		if (class_exists('PHP_Timer', false) === true) {
-		    PHP_Timer::start();
+			PHP_Timer::start();
 		}
 
 		$this->_process();
@@ -278,10 +273,148 @@ class CodeSnifferShell extends AppShell {
 	public function standards() {
 		$this->out('Current standard: ' . $this->standard, 2);
 
-		$_SERVER['argv'] = array();
-		$_SERVER['argv'][] = 'phpcs';
-		$_SERVER['argv'][] = '-i';
-		$this->_process();
+		$standards = $this->_standards();
+
+		$this->out('The installed coding standards are:');
+		$this->out(implode(', ', $standards));
+
+		$standard = $this->standard;
+		if (!empty($this->args[0])) {
+			$standard = $this->args[0];
+		}
+		if (!in_array($standard, $standards)) {
+			$this->error('Invalid standard');
+		}
+
+		$phpcs = new PHP_CodeSniffer_CLI();
+		$phpcs->explainStandard($standard);
+	}
+
+	/**
+	 * CodeSnifferShell::compare()
+	 *
+	 * @return void
+	 */
+	public function compare() {
+		$from = $this->standard;
+
+		$available = $this->_standards();
+
+		if (count($this->args) > 1) {
+			$to = $this->args[1];
+			$from = $this->args[0];
+		} elseif (count($this->args) === 1) {
+			$to = $this->args[0];
+		} else {
+			$to = $this->in('Compare ' . $from . ' to ...', $available);
+		}
+		if (!$to) {
+			return $this->error('Invalid source or target');
+		}
+
+		$sniffsFrom = $this->_sniffs($from);
+		$sniffsTo = $this->_sniffs($to);
+
+		$both = $onlyFrom = $onlyTo = array();
+
+		foreach ($sniffsFrom as $sniff) {
+			if (!in_array($sniff, $sniffsTo)) {
+				$onlyFrom[] = $sniff;
+			} else {
+				$both[] = $sniff;
+			}
+		}
+		foreach ($sniffsTo as $sniff) {
+			if (!in_array($sniff, $sniffsFrom)) {
+				$onlyTo[] = $sniff;
+			} elseif (!in_array($sniff, $both)) {
+				$both[] = $sniff;
+			}
+		}
+
+		$fromText = $from . ' (' . count($sniffsFrom) . ' sniffs)';
+		$toText = $to . ' (' . count($sniffsTo) . ' sniffs)';
+		$this->out(sprintf('Comparing %s to %s:', $fromText, $toText), 2);
+
+		if ($onlyFrom) {
+			$onlyFrom = Utility::expandList($onlyFrom);
+
+			$this->out($from . ' has the following sniffs ' . $to . ' does not have:');
+			foreach ($onlyFrom as $name => $groups) {
+				foreach ($groups as $group => $sniffs) {
+					$this->out(' * ' . $name . '.' . $group);
+					foreach ($sniffs as $sniff) {
+						$this->out('   - ' . $sniff);
+					}
+				}
+			}
+			$this->out();
+		}
+
+		if ($onlyTo) {
+			$onlyTo = Utility::expandList($onlyTo);
+
+			$this->out($to . ' has the following sniffs ' . $from . ' does not have:');
+			foreach ($onlyTo as $name => $groups) {
+				foreach ($groups as $group => $sniffs) {
+					$this->out(' * ' . $name . '.' . $group);
+					foreach ($sniffs as $sniff) {
+						$this->out('   - ' . $sniff);
+					}
+				}
+			}
+			$this->out();
+		}
+
+		if ($both) {
+			$both = Utility::expandList($both);
+
+			$this->out($to . ' and ' . $from . ' both the following sniffs:', 1, Shell::VERBOSE);
+			foreach ($both as $name => $groups) {
+				foreach ($groups as $group => $sniffs) {
+					$this->out(' * ' . $name . '.' . $group, 1, Shell::VERBOSE);
+					foreach ($sniffs as $sniff) {
+						$this->out('   - ' . $sniff, 1, Shell::VERBOSE);
+					}
+				}
+			}
+			$this->out();
+		}
+	}
+
+	/**
+	 * CodeSnifferShell::_standards()
+	 *
+	 * @return array
+	 */
+	protected function _standards() {
+		include_once 'PHP/CodeSniffer.php';
+		return PHP_CodeSniffer::getInstalledStandards();
+	}
+
+	/**
+	 * CodeSnifferShell::_sniffs()
+	 *
+	 * @return array
+	 */
+	protected function _sniffs($standard) {
+		include_once 'PHP/CodeSniffer.php';
+		$phpcs = new PHP_CodeSniffer();
+		$phpcs->process(array(), $standard);
+		$sniffs = $phpcs->getSniffs();
+		$sniffs = array_keys($sniffs);
+		sort($sniffs);
+
+		$result = array();
+		foreach ($sniffs as $sniff) {
+			$result[] = $this->_formatSniff($sniff);
+		}
+		return $result;
+	}
+
+	protected function _formatSniff($sniff) {
+		$parts = explode('_', str_replace('\\', '_', $sniff));
+		return $parts[0] . '.' . $parts[2] . '.' . substr($parts[3], 0, -5);
 	}
 
 	/**
@@ -559,22 +692,22 @@ class CodeSnifferShell extends AppShell {
 
 		// Allow as much memory as possible by default
 		if (extension_loaded('suhosin') && is_numeric(ini_get('suhosin.memory_limit'))) {
-		    $limit = ini_get('memory_limit');
-		    if (preg_match('(^(\d+)([BKMGT]))', $limit, $match)) {
-		        $shift = array('B' => 0, 'K' => 10, 'M' => 20, 'G' => 30, 'T' => 40);
-		        $limit = ($match[1] * (1 << $shift[$match[2]]));
-		    }
-		    if (ini_get('suhosin.memory_limit') > $limit && $limit > -1) {
-		        ini_set('memory_limit', ini_get('suhosin.memory_limit'));
-		    }
+			$limit = ini_get('memory_limit');
+			if (preg_match('(^(\d+)([BKMGT]))', $limit, $match)) {
+				$shift = array('B' => 0, 'K' => 10, 'M' => 20, 'G' => 30, 'T' => 40);
+				$limit = ($match[1] * (1 << $shift[$match[2]]));
+			}
+			if (ini_get('suhosin.memory_limit') > $limit && $limit > -1) {
+				ini_set('memory_limit', ini_get('suhosin.memory_limit'));
+			}
 		} else {
-		    ini_set('memory_limit', -1);
+			ini_set('memory_limit', -1);
 		}
 
 		// Check php setup for cli arguments
 		if (!isset($_SERVER['argv']) && !isset($argv)) {
-		    fwrite(STDERR, 'Please enable the "register_argc_argv" directive in your php.ini', PHP_EOL);
-		    exit(1);
+			fwrite(STDERR, 'Please enable the "register_argc_argv" directive in your php.ini', PHP_EOL);
+			exit(1);
 		}
 
 		$_SERVER['argv'] = array();
@@ -610,7 +743,7 @@ class CodeSnifferShell extends AppShell {
 	/**
 	 * CodeSnifferShell::_process()
 	 *
-	 * @return void
+	 * @return int Exit
 	 */
 	protected function _process() {
 		include_once 'PHP/CodeSniffer/CLI.php';
@@ -630,7 +763,7 @@ class CodeSnifferShell extends AppShell {
 			$cliValues['reports'] = array('diff' => $diffFile);
 
 			if (file_exists($diffFile) === true) {
-			    unlink($diffFile);
+				unlink($diffFile);
 			}
 		}
 		$numErrors = $phpcs->process($cliValues);
@@ -650,7 +783,7 @@ class CodeSnifferShell extends AppShell {
 				$output = array();
 				$retVal = null;
 				exec($cmd, $output, $retVal);
-				//unlink($diffFile);
+				unlink($diffFile);
 
 				if ($retVal === 0) {
 					// Everything went well.
@@ -668,6 +801,8 @@ class CodeSnifferShell extends AppShell {
 		if ($numErrors !== 0) {
 			$this->err('An error occured during processing.');
 		}
+
+		return $exit;
 	}
 
 	/**
@@ -714,6 +849,9 @@ class CodeSnifferShell extends AppShell {
 		->addSubcommand('standards', array(
 			'help' => __d('cake_console', 'List available standards and the current default one.'),
 			//'parser' => $parser
+		))
+		->addSubcommand('compare', array(
+			'help' => __d('cake_console', 'Compare available standards (diff).'),
 		))
 		->addSubcommand('tokenize', array(
 			'help' => __d('cake_console', 'Tokenize file as {filename}.token and store it in the same dir.'),

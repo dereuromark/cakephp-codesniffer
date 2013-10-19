@@ -8,7 +8,7 @@ The plugin provides a quick way to run your (default) sniffer rules on your app 
 It comes with good default settings for Cake apps and works out of the box as self-contained system.
 
 By default it
-- ignores webroot and Vendor folders (in app or plugin)
+- ignores Plugin as well as webroot and Vendor folders (in app or plugin)
 - creates a log file in TMP for larger error reports where the console screen can't hold that much information)
 - NEW: Can now also auto-correct most standard CS issues using the phpcs-fixer branch.
 
@@ -121,6 +121,12 @@ You are free to stick to the official version using the "CakePHP" standard!
 
 * Line endings on Windows are allowed to be \r\n (default for GIT on Windows for example)
 * Detect Yoda conditions.
+
+### Comparing sniffs
+
+If you extend the CakePHP core standard (or any other), at some point you might want to compare them, regarding
+whats sniffs are run. Sometimes, when adding a new sniff, one can easily forget to update the other standard's xml.
+This way it can easily be detected - and corrected.
 
 ## TODOS
 
