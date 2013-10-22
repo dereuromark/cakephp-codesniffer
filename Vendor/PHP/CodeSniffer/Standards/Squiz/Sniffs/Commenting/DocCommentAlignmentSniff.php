@@ -138,6 +138,16 @@ class Squiz_Sniffs_Commenting_DocCommentAlignmentSniff implements PHP_CodeSniffe
 
             // Check the alignment of each asterisk.
             $currentColumn  = strpos($content, '*');
+            if ($currentColumn === false) {
+                  $error = 'Expected %s space(s) before asterisk; %s found';
+                $data  = array(
+                      ($requiredColumn - 1),
+                      ($currentColumn - 1),
+                     );
+
+                $phpcsFile->addError($error, $commentPointer, 'SpaceBeforeAsterisk', $data);
+                return;
+            }
             $currentColumn += $tokens[$commentPointer]['column'];
 
             if ($currentColumn === $requiredColumn) {

@@ -93,6 +93,7 @@
 	<rule ref="CakePHP.WhiteSpace.FunctionSpacing"/>
 	<rule ref="CakePHP.WhiteSpace.ObjectOperatorSpacing"/>
 	<rule ref="CakePHP.WhiteSpace.OperatorSpacing"/>
+	<rule ref="CakePHP.WhiteSpace.ScopeIndent"/>
 	<rule ref="CakePHP.WhiteSpace.ScopeClosingBrace"/>
 	<rule ref="CakePHP.WhiteSpace.TabAndSpace"/>
 	<rule ref="CakePHP.WhiteSpace.CommaSpacing"/>

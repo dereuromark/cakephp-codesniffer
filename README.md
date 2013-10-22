@@ -14,12 +14,17 @@ By default it
 
 It is also quite helpful when creating new sniffer rules (using tokenizer command).
 
+
 ## Requirements
 
 CakePHP 2.x
 
-This is a self-contained plugin shipped with everything including phpcs and sniffs.
+This is a self-contained CakePHP-only plugin shipped with everything including phpcs and sniffs.
 Drag and drop it. Run it. Enjoy.
+
+Possible dependencies:
+
+- my Tools Plugin (for some commands)
 
 ## How to use
 
@@ -122,11 +127,53 @@ You are free to stick to the official version using the "CakePHP" standard!
 * Line endings on Windows are allowed to be \r\n (default for GIT on Windows for example)
 * Detect Yoda conditions.
 
+### Writing new sniffs (and tests for it)
+
+Using this phpcs-fixer branch it is a little bit different to write new sniffs.
+You should switch `addError()` with `addFixableError()` and an actual fix where applicable.
+Also, writing tests, we then also need an "expected" result to compare our fixed file to.
+
+So basically, for a new sniff IsFoo in MyCakePHP, we need:
+
+* is_foo_fail.php containing all the possible fails (if autocorrected or not)
+* is_foo_pass.php containing all passes (and stuff that is just skipped)
+* is_foo_expected.php (optional) containing the expected output of the fixed is_foo_fail.php file
+
+Note that you should always put these headers into the fail file:
+
+	// @expectedErrors 4
+	// @expectedCorrections 2
+	// @sniffs MyCakePHP.WhiteSpace.IsFoo
+
+This asserts that other sniffs don't intefere, as we specifically test this sniff only.
+`expectedErrors` and `expectedCorrections` can be used to assert the amount of fails that should be recognized and corrected.
+The pass file only needs the `sniffs` part, obviously. The expect file should not contain those headers, at all.
+
+Multiple sniffs can be used comma-separated. If you omit them, all the sniffs of this standard will be run. This is useful for
+a complete test file where all sniffs should be checked combined and at once.
+
+You can run the test files using phpunit as always:
+
+	phpunit /path/to/plugin/CodeSniffer/Vendor/PHP/CodeSniffer/Standards/MyCakePHP/tests/Tests/NameOfTest.php
+
+You should run this command from your APP folder.
+It will then automatically patch in the plugin's phpcs-fixer branch version and the correct path for TMP.
+
+Token-Tip: When starting to write a new sniff for something, create your pass and fail files first and use
+the tokenizer command to tokenize those files into filename.php.token - this will give you the codes
+of all used tokens and will make it easier to write sniffs for it. And use -v for verbose information!
+
+Debug-Tip: Use above phpunit test case command with -v to have more debug output for easier developing and testing.
+
 ### Comparing sniffs
+
+	cake CodeSniffer.Codesniffer compare [source] [target]
 
 If you extend the CakePHP core standard (or any other), at some point you might want to compare them, regarding
 whats sniffs are run. Sometimes, when adding a new sniff, one can easily forget to update the other standard's xml.
 This way it can easily be detected - and corrected.
+
+The source can be omitted and will fall back to the default one. The target can also be omitted and will be prompted then.
 
 ## TODOS
 

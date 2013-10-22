@@ -42,8 +42,19 @@ class MyCakePHP_Sniffs_ControlStructures_ConditionalExpressionOrderSniff impleme
 			return;
 		}
 
-		if (!in_array($tokens[$leftToken]['code'], array(T_NULL, T_FALSE, T_TRUE, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING))) {
+		// Only sniff for specified tokens
+		if (!in_array($tokens[$leftToken]['code'], array(T_MINUS, T_NULL, T_FALSE, T_TRUE, T_LNUMBER, T_CONSTANT_ENCAPSED_STRING))) {
 			return;
+		}
+		$leftTokenStart = $leftToken;
+
+		if ($tokens[$leftToken]['code'] === T_MINUS) {
+			if ($tokens[$leftToken + 1]['code'] !== T_LNUMBER) {
+				$error = 'Usage of Yoda conditions is not advised. Please switch the expression order.';
+				$phpcsFile->addError($error, $stackPtr, 'ExpressionOrder');
+				return;
+			}
+			$leftToken = $leftToken + 1;
 		}
 
 		// Get the comparison operator
@@ -59,16 +70,40 @@ class MyCakePHP_Sniffs_ControlStructures_ConditionalExpressionOrderSniff impleme
 		if (!$rightToken) {
 			return;
 		}
+		$rightTokenStart = $rightToken;
+
+		// If its T_OPEN_PARENTHESIS we need to find the closing one
+		if ($tokens[$rightToken]['code'] === T_OPEN_PARENTHESIS) {
+			$rightToken = $tokens[$rightToken]['parenthesis_closer'];
+		}
+
+		// Check if we need to inverse comparison operator
+		$comparisonTokenValue = $tokens[$comparisonToken]['content'];
+		if (in_array($tokens[$comparisonToken]['code'], array(T_GREATER_THAN, T_LESS_THAN,
+			T_IS_GREATER_OR_EQUAL, T_IS_SMALLER_OR_EQUAL))) {
+			$mapping = array(
+				T_GREATER_THAN => '<',
+				T_LESS_THAN => '>',
+				T_IS_GREATER_OR_EQUAL => '<=',
+				T_IS_SMALLER_OR_EQUAL => '>='
+			);
+			$comparisonTokenValue = $mapping[$tokens[$comparisonToken]['code']];
+		}
 
 		$error = 'Usage of Yoda conditions is not advised. Please switch the expression order.';
 		$phpcsFile->addFixableError($error, $stackPtr, 'ExpressionOrder');
 
 		// Fix the error
 		if ($phpcsFile->fixer->enabled === true) {
-			$tmp = $tokens[$leftToken]['content'];
+			$tmp = '';
+			for ($i = $leftTokenStart; $i <= $leftToken; $i++) {
+				$tmp .= $tokens[$i]['content'];
+			}
 			$phpcsFile->fixer->beginChangeset();
-			$phpcsFile->fixer->replaceToken($leftToken, $tokens[$rightToken]['content']);
-			$phpcsFile->fixer->replaceToken($rightToken, $tmp);
+			for ($i = $leftTokenStart; $i < $rightTokenStart; $i++) {
+				$phpcsFile->fixer->replaceToken($i, '');
+			}
+			$phpcsFile->fixer->addContent($rightToken, ' ' . $comparisonTokenValue . ' ' . $tmp);
 			$phpcsFile->fixer->endChangeset();
 		}
 	}

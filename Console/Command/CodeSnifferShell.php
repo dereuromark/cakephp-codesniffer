@@ -101,7 +101,7 @@ class CodeSnifferShell extends AppShell {
 		//$_SERVER['argv'][] = '--warning-severity=1';
 
 		if (!$customPath) {
-			$ignored = '--ignore=*__*,*/webroot/*,*/Vendor/*';
+			$ignored = '--ignore=_*,*__*,*/webroot/*,*/Vendor/*';
 			if (empty($this->params['plugin'])) {
 				$ignored .= ',*/Plugin/*';
 			}
@@ -768,6 +768,7 @@ class CodeSnifferShell extends AppShell {
 		}
 		$numErrors = $phpcs->process($cliValues);
 
+		$exit = 0;
 		if ($this->params['fix']) {
 			if (file_exists($diffFile) === false) {
 				// Nothing to fix.
