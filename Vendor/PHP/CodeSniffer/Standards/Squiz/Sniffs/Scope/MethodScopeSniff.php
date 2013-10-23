@@ -66,7 +66,30 @@ class Squiz_Sniffs_Scope_MethodScopeSniff extends PHP_CodeSniffer_Standards_Abst
         if (($modifier === false) || ($tokens[$modifier]['line'] !== $tokens[$stackPtr]['line'])) {
             $error = 'Visibility must be declared on method "%s"';
             $data  = array($methodName);
-            $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
+
+            $previous = $phpcsFile->findPrevious(array(T_WHITESPACE), $stackPtr - 1, null, true);
+
+            // Only correct the trivial cases for now
+            if (!$modifier && $tokens[$modifier]['line'] === $tokens[$stackPtr]['line']) {
+                $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
+
+                $visbility = 'public';
+                $name = substr($tokens[$stackPtr]['content'], 1);
+                $totalUnderscores = 0;
+                while(strpos($name, '_') === 0) {
+                    $totalUnderscores++;
+                    $name = substr($name, 1);
+                }
+                if ($totalUnderscores > 1) {
+                    $visbility = 'private';
+                } elseif ($totalUnderscores > 0) {
+                    $visbility = 'protected';
+                }
+
+            } else {
+                $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
+            }
+            //TODO
         }
 
     }//end processTokenWithinScope()

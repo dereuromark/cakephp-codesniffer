@@ -12,7 +12,7 @@
  *   ... T_VARIABLE T_INLINE_THEN T_GOTO_LABEL T_NULL T_SEMICOLON
  *
  */
-class MyCakePHP_Sniffs_WhiteSpace_TernarySniff implements PHP_CodeSniffer_Sniff {
+class MyCakePHP_Sniffs_WhiteSpace_TernarySpacingSniff implements PHP_CodeSniffer_Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.

@@ -51,8 +51,21 @@ class MyCakePHP_Sniffs_WhiteSpace_LanguageConstructSpacingSniff implements PHP_C
 		// We don't care about the following whitespace and let another sniff take care of that
 		$nextToken = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
 
-		// No brackets - everything's fine
+		// No brackets
 		if ($tokens[$nextToken]['code'] !== T_OPEN_PARENTHESIS) {
+			// Check if there is at least a whitespace in between
+			if ($nextToken - $stackPtr > 1) {
+				// Everything's fine
+				return;
+			}
+
+			$error = 'Language constructs must contain a whitespace.';
+			$phpcsFile->addFixableError($error, $stackPtr, 'MissingWhitespace');
+
+			if ($phpcsFile->fixer->enabled === true) {
+				$phpcsFile->fixer->addContent($stackPtr, ' ');
+			}
+
 			return;
 		}
 
