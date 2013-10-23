@@ -154,8 +154,8 @@ class Squiz_Sniffs_Commenting_DocCommentAlignmentSniff implements PHP_CodeSniffe
                 // Star is aligned correctly.
                 continue;
             }
-            echo returns($tokens[$commentPointer]);
-            echo returns($commentPointer);
+            //echo returns($tokens[$commentPointer]);
+            //echo returns($commentPointer);
             $error = 'Expected %s space(s) before asterisk; %s found';
             $data  = array(
                       ($requiredColumn - 1),

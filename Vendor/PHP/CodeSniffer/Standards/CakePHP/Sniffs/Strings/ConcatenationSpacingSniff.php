@@ -51,8 +51,9 @@ class CakePHP_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffe
 			if ($spaces > 1) {
 				$message = 'Expected 1 space before ., but %d found';
 				$data = array($spaces);
-				$phpcsFile->addFixableError($message, $stackPtr, 'TooManyBefore', $data);
-				$this->_removeSpace($phpcsFile, $stackPtr - 1);
+
+				// We cannot remove the indentation, let another sniff take care of this here
+				//$phpcsFile->addError($message, $stackPtr, 'TooManyBefore', $data);
 			}
 		}
 
@@ -66,8 +67,8 @@ class CakePHP_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffe
 			if ($spaces > 1) {
 				$message = 'Expected 1 space after ., but %d found';
 				$data = array($spaces);
-				$phpcsFile->addFixableError($message, $stackPtr, 'TooManyAfter', $data);
-				$this->_removeSpace($phpcsFile, $stackPtr + 1);
+				// Too many spaces should another sniff take care of
+				//$phpcsFile->addError($message, $stackPtr, 'TooManyAfter', $data);
 			}
 		}
 	}
@@ -84,21 +85,6 @@ class CakePHP_Sniffs_Strings_ConcatenationSpacingSniff implements PHP_CodeSniffe
 			return;
 		}
 		$phpcsFile->fixer->addContent($location, ' ');
-	}
-
-/**
- * Remove spaces expect for one on the right sight.
- *
- * @param object $phpcsFile
- * @param integer $location
- * @return void
- */
-	protected function _removeSpace($phpcsFile, $location) {
-		if ($phpcsFile->fixer->enabled !== true) {
-			return;
-		}
-		//$content = $tokens[$location]['content'];
-		$phpcsFile->fixer->replaceToken($location, ' ');
 	}
 
 }

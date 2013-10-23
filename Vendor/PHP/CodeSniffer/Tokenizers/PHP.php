@@ -271,7 +271,7 @@ class PHP_CodeSniffer_Tokenizers_PHP
                     $content  = $token;
                 }
 
-                $content = str_replace(' ', "\033[30;1mÂ·\033[0m", $content);
+                $content = str_replace(' ', "\033[30;1m·\033[0m", $content);
                 echo "\tProcess token $stackPtr: $type => $content".PHP_EOL;
             }
 
@@ -468,15 +468,18 @@ class PHP_CodeSniffer_Tokenizers_PHP
                                T_CASE,
                                T_SEMICOLON,
                                T_OPEN_CURLY_BRACKET,
+                               T_INLINE_THEN,
                               );
 
-                for ($x = ($newStackPtr - 2); $x > 0; $x--) {
+                for ($x = ($newStackPtr - 1); $x > 0; $x--) {
                     if (in_array($finalTokens[$x]['code'], $stopTokens) === true) {
                         break;
                     }
                 }
 
-                if (false && $finalTokens[$x]['code'] !== T_CASE && $finalTokens[$x + 1]['code'] !== T_INLINE_ELSE) {
+                if ($finalTokens[$x]['code'] !== T_CASE
+                    && $finalTokens[$x]['code'] !== T_INLINE_THEN
+                ) {
                     $finalTokens[$newStackPtr] = array(
                                                   'content' => $token[1].':',
                                                   'code'    => T_GOTO_LABEL,

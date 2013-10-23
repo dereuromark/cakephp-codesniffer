@@ -60,7 +60,7 @@ class TestHelper {
 		$options = array_merge($options, array(
 			'encoding' => 'utf-8',
 			'files' => array($file),
-			'standard' => array($this->_rootDir . '/ruleset.xml'),
+			'standard' => array($this->_rootDir . DIRECTORY_SEPARATOR . 'ruleset.xml'),
 		));
 		if ($sniffs) {
 			if (!is_array($sniffs)) {

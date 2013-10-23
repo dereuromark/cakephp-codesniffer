@@ -11,10 +11,10 @@ class Foo {
 
 	public function test2() {
 		$x = $y
-		.$x;
+			.$x;
 
-		$y = 'some string'
-		.'more';
+		$y = 'some string'.
+			'more';
 	}
 
 }

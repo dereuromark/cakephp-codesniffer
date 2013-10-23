@@ -41,6 +41,7 @@ class CakePHPStandardTest extends PHPUnit_Framework_TestCase {
 		$standard = dirname(dirname(__FILE__));
 
 		$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(dirname(__FILE__) . '/files'));
+		$tests = array();
 		foreach ($iterator as $dir) {
 			if ($dir->isDir()) {
 				continue;
@@ -93,6 +94,9 @@ class CakePHPStandardTest extends PHPUnit_Framework_TestCase {
 				$expectedCorrections,
 				$expectedResult,
 			);
+		}
+		if (empty($tests)) {
+			throw new RuntimeException('No test files found');
 		}
 		return $tests;
 	}
