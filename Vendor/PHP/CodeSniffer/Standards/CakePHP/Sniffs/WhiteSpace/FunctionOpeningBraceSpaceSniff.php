@@ -62,7 +62,16 @@ class CakePHP_Sniffs_WhiteSpace_FunctionOpeningBraceSpaceSniff implements PHP_Co
 		if ($found > 0) {
 			$error = 'Expected 0 blank lines after opening function brace; %s found';
 			$data = array($found);
-			$phpcsFile->addError($error, $openBrace, 'SpacingAfter', $data);
+
+			$nextContent = $phpcsFile->findNext(T_WHITESPACE, ($openBrace + 1), null, true);
+			// If there is content after the brace and on the same line, we cannot fix this
+			if ($nextContent && $tokens[$nextContent]['line'] === $nextLine) {
+				$phpcsFile->addError($error, $openBrace, 'SpacingAfter', $data);
+				return;
+			}
+
+			$phpcsFile->addFixableError($error, $openBrace, 'SpacingAfter', $data);
+			//TODO
 		}
 	}
 

@@ -50,7 +50,7 @@ class Squiz_Sniffs_Scope_MemberVarScopeSniff extends PHP_CodeSniffer_Standards_A
             $error = 'Scope modifier not specified for member variable "%s"';
 
             $previous = $phpcsFile->findPrevious(array(T_WHITESPACE), $stackPtr - 1, null, true);
-            $data  = array($tokens[$stackPtr]['content']);
+            $data = array($tokens[$stackPtr]['content']);
 
             if ($previous && $tokens[$previous]['code'] === T_VAR) {
                 $phpcsFile->addFixableError($error, $stackPtr, 'Missing', $data);
