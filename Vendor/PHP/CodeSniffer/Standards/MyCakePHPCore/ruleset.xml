@@ -73,6 +73,7 @@
 	<rule ref="MyCakePHP.PHP.IsWritable"/>
 	<rule ref="MyCakePHP.PHP.IsNull"/>
 	<rule ref="MyCakePHP.PHP.IsInt"/>
+	<rule ref="MyCakePHP.PHP.FunctionName"/>
 
 	<rule ref="CakePHP.Strings.ConcatenationSpacing"/>
 
@@ -98,6 +99,8 @@
 	<rule ref="CakePHP.WhiteSpace.TabAndSpace"/>
 	<rule ref="CakePHP.WhiteSpace.CommaSpacing"/>
 	<rule ref="MyCakePHP.WhiteSpace.TernarySpacing"/>
+	<rule ref="MyCakePHP.WhiteSpace.ControlStructureSpacing"/>
+	<rule ref="MyCakePHP.WhiteSpace.LanguageConstructSpacing"/>
 
 	<!-- All rules in ./Sniffs are included automatically -->
 </ruleset>
