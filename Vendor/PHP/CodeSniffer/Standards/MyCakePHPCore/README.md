@@ -20,6 +20,9 @@ After installation you can check code compliance to the standard using
 * IsNull sniff
 * IsInt/IsWritable sniff
 * TypeCasting sniff
+* FunctionName sniff
+* ControlStructureSpacing
+* LanguageConstructSpacing
 * Ternary (incl. short ternary) sniff
 * DocBlockEnding sniff
 * @return doc block sniff

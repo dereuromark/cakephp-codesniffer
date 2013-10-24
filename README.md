@@ -107,6 +107,9 @@ This will create a file `/path/to/file.ext.token` with all token names added in 
 * IsNull sniff
 * Type casting sniff
 * @return doc block sniff
+* FunctionName sniff
+* ControlStructureSpacing
+* LanguageConstructSpacing
 * Ternary (incl. short ternary) sniff
 * DocBlockEnding sniff
 * ReturnEarly sniff to detect if a return statement is followed by an ELSE block.
@@ -122,10 +125,9 @@ Note: The "correct" indentation is APP and plugin specific for me. This is the o
 standards and applies to all my (non core) code.
 You are free to stick to the official version using the "CakePHP" standard!
 
-### MyCakePHPCore improvements (optional)
+### MyCakePHPCore improvements on top of MyCakePHP ones (optional)
 
 * Line endings on Windows are allowed to be \r\n (default for GIT on Windows for example)
-* Detect Yoda conditions.
 
 ### Writing new sniffs (and tests for it)
 

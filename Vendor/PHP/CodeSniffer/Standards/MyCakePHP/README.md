@@ -20,10 +20,13 @@ After installation you can check code compliance to the standard using
 * IsNull sniff
 * IsInt/IsWritable sniff
 * TypeCasting sniff
-* @return doc block sniff
-* Ternary (incl. short ternary) sniff
+* FunctionName sniff
+* ControlStructureSpacing
+* LanguageConstructSpacing
 * DocBlockEnding sniff
 * LanguageConstructSpacing sniff
+* Ternary (incl. short ternary) sniff
+* @return doc block sniff
 * Indentation correct (same level as methods and attributes for classes)
 * LF on Windows are allowed to be \r\n
 
