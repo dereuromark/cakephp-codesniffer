@@ -125,9 +125,12 @@ Note: The "correct" indentation is APP and plugin specific for me. This is the o
 standards and applies to all my (non core) code.
 You are free to stick to the official version using the "CakePHP" standard!
 
-### MyCakePHPCore improvements on top of MyCakePHP ones (optional)
+### MyCakePHPCore improvements (optional)
 
 * Line endings on Windows are allowed to be \r\n (default for GIT on Windows for example)
+* >> 10 new sniffs (see MyCakePHP)
+
+For details see the ruleset.xml in the `Standards` dir.
 
 ### Writing new sniffs (and tests for it)
 
