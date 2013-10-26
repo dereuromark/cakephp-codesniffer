@@ -7,8 +7,8 @@ class Foo {
 
 	public function test() {
 		$x = 'string' ;
-		$y = 'a long
-		string'
+		$y = 'a long' .
+			'string'
 		;
 	}
 
