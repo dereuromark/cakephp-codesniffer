@@ -56,10 +56,9 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 		for ($i = $closer; $i < $phpcsFile->numTokens; $i++) {
 			if (strpos($tokens[$i]['content'], $phpcsFile->eolChar) === false) {
 				continue;
-			} else {
-				$nextLineToken = ($i + 1);
-				break;
 			}
+			$nextLineToken = ($i + 1);
+			break;
 		}
 
 		if ($nextLineToken === null) {
@@ -88,11 +87,17 @@ class CakePHP_Sniffs_WhiteSpace_FunctionSpacingSniff implements PHP_CodeSniffer_
 
 				if ($phpcsFile->fixer->enabled === true) {
 					// Find the first token in this line
-					$token = $nextContent;
-					while($tokens[$nextContent]['line'] === $tokens[$token]['line']) {
-						$token--;
+					$token = $closer;
+					if (empty($nextContent)) {
+						$token = $closer;
+						$phpcsFile->fixer->addContent($token, $phpcsFile->eolChar);
+					} else {
+						$token = $nextContent;
+						while($tokens[$nextContent]['line'] === $tokens[$token]['line']) {
+							$token--;
+						}
+						$phpcsFile->fixer->addNewlineBefore($token);
 					}
-					$phpcsFile->fixer->addNewlineBefore($token);
 				}
 			}
 		}

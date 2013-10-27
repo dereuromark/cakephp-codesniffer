@@ -36,3 +36,9 @@ class Foo {
 
 
 }
+
+function sth() {
+}
+
+function sthElse() {
+}

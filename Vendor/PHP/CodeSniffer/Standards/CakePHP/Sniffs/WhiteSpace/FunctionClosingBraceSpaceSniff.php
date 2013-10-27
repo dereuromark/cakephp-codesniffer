@@ -70,8 +70,8 @@ class CakePHP_Sniffs_WhiteSpace_FunctionClosingBraceSpaceSniff implements PHP_Co
 		} elseif ($found > 0) {
 			$error = 'Expected 0 blank lines before closing function brace; %s found';
 			$data = array($found);
-			$phpcsFile->addFixableError($error, $closeBrace, 'SpacingBeforeClose', $data);
-			if ($phpcsFile->fixer->enabled === true) {
+			$fix = $phpcsFile->addFixableError($error, $closeBrace, 'SpacingBeforeClose', $data);
+			if ($fix && $phpcsFile->fixer->enabled === true) {
 				$endOfContent = $prevContent + 1;
 				$lastWhiteSpace = $closeBrace - 2;
 				for ($i = $endOfContent; $i < $lastWhiteSpace; $i++) {
