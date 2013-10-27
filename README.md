@@ -28,7 +28,18 @@ Possible dependencies:
 
 ## How to use
 
-1. Download the plugin and place it at `APP/Plugin/CodeSniffer` (or ROOT/plugins/ folder).
+1. Installation via Composer or Download
+ 
+ a) Add this to your composer.json file (phpcs is included in this repo, not as a Composer dependency)
+
+```
+{
+  "require" : {
+    "dereuromark/cakephp-codesniffer": "dev-master""
+  }
+}
+```
+ b) Download the plugin and place it at `APP/Plugin/CodeSniffer` (or ROOT/plugins/ folder).
 
    ```bash
    cd APP/Plugin
