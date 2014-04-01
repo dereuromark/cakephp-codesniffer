@@ -68,8 +68,11 @@ class MyCakePHP_Sniffs_ControlStructures_ConditionalExpressionOrderSniff impleme
 		// Look for the right expression
 		$rightToken = $phpcsFile->findNext(T_WHITESPACE, ($comparisonToken + 1), null, true);
 		if (!$rightToken) {
+			$error = 'Usage of Yoda conditions is not advised. Please switch the expression order.';
+			$phpcsFile->addError($error, $stackPtr, 'ExpressionOrder');
 			return;
 		}
+
 		$rightTokenStart = $rightToken;
 
 		// If its T_OPEN_PARENTHESIS we need to find the closing one

@@ -50,7 +50,6 @@
 	<rule ref="PEAR.NamingConventions.ValidClassName"/>
 	<rule ref="CakePHP.NamingConventions.ValidClassBrackets"/>
 	<rule ref="CakePHP.NamingConventions.ValidFunctionName"/>
-	<rule ref="CakePHP.NamingConventions.ValidNamespaceName"/>
 	<rule ref="CakePHP.NamingConventions.ValidTraitName"/>
 	<rule ref="CakePHP.NamingConventions.ValidVariableName"/>
 

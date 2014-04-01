@@ -14,6 +14,8 @@ class Foo {
 
 		$y = 'some string' .
 			'more';
+
+		$z = '- ' . __('noRestriction') . ' -';
 	}
 
 }

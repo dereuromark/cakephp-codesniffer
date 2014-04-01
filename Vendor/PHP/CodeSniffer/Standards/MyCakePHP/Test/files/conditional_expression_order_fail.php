@@ -12,6 +12,9 @@ if(true === ($foo = $this->thing())) {
 } elseif (1!== $x){
 }
 
+if ($foo && false === mime_content_type($file->pwd())) {
+}
+
 if (2 > $foo) { // Careful, < and > switch here
 } elseif (-5 < $a) { // Careful, negative char needs to be switched, too
 }
