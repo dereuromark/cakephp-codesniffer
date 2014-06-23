@@ -262,7 +262,7 @@ class PHP_CodeSniffer_DocGenerators_HTML extends PHP_CodeSniffer_DocGenerators_G
         $firstTitle = $codeBlocks->item(0)->getAttribute('title');
         $first = trim($codeBlocks->item(0)->nodeValue);
         $first = str_replace('<?php', '&lt;?php', $first);
-        $first = str_replace("\n", '</br>', $first);
+        $first = str_replace("\n", '<br />', $first);
         $first = str_replace(' ', '&nbsp;', $first);
         $first = str_replace('<em>', '<span class="code-comparison-highlight">', $first);
         $first = str_replace('</em>', '</span>', $first);
@@ -270,7 +270,7 @@ class PHP_CodeSniffer_DocGenerators_HTML extends PHP_CodeSniffer_DocGenerators_G
         $secondTitle = $codeBlocks->item(1)->getAttribute('title');
         $second = trim($codeBlocks->item(1)->nodeValue);
         $second = str_replace('<?php', '&lt;?php', $second);
-        $second = str_replace("\n", '</br>', $second);
+        $second = str_replace("\n", '<br />', $second);
         $second = str_replace(' ', '&nbsp;', $second);
         $second = str_replace('<em>', '<span class="code-comparison-highlight">', $second);
         $second = str_replace('</em>', '</span>', $second);
