@@ -21,6 +21,7 @@
 	<!--<rule ref="Squiz.Commenting.InlineComment"/>-->
 	<!--<rule ref="Squiz.Commenting.FunctionComment"/>-->
 	<rule ref="CakePHP.Commenting.FunctionCommentThrowTag"/>
+	<rule ref="CakePHP.Commenting.FunctionCommentType"/>
 	<rule ref="Generic.Commenting.Todo"/>
 	<rule ref="MyCakePHP.Commenting.ReturnTag"/>
 	<rule ref="MyCakePHP.Commenting.DocBlockEnding"/>
@@ -68,7 +69,7 @@
 	<rule ref="Generic.PHP.NoSilencedErrors"/>
 	<rule ref="Generic.PHP.LowerCaseConstant"/>
 	<rule ref="CakePHP.PHP.DisallowShortOpenTag"/>
-	<rule ref="MyCakePHP.PHP.TypeCasting"/>
+	<rule ref="CakePHP.PHP.TypeCasting"/>
 	<rule ref="MyCakePHP.PHP.IsWritable"/>
 	<rule ref="MyCakePHP.PHP.IsNull"/>
 	<rule ref="MyCakePHP.PHP.IsInt"/>
@@ -87,6 +88,7 @@
 	<rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
 	<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+	<rule ref="CakePHP.WhiteSpace.ClassSpacing"/>
 	<rule ref="CakePHP.WhiteSpace.FunctionCallSpacing"/>
 	<rule ref="CakePHP.WhiteSpace.FunctionClosingBraceSpace"/>
 	<rule ref="CakePHP.WhiteSpace.FunctionOpeningBraceSpace"/>
