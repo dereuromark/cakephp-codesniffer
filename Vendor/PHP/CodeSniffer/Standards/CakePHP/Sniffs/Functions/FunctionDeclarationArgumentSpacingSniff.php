@@ -1,22 +1,27 @@
 <?php
+/**
+ * PHP Version 5
+ *
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://pear.php.net/package/PHP_CodeSniffer_CakePHP
+ * @since         CakePHP CodeSniffer 0.1.18
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
 if (class_exists('Squiz_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff', true) === false) {
 	$error = 'Class Squiz_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff not found';
 	throw new PHP_CodeSniffer_Exception($error);
 }
 
 /**
- * CakePHP_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff.
+ * Ensures the spacing of function declaration arguments is correct.
  *
- * Checks that arguments in function declarations are spaced correctly.
- *
- * @category  PHP
- * @package   PHP_CodeSniffer
- * @author    Greg Sherwood <gsherwood@squiz.net>
- * @author    Marc McIntyre <mmcintyre@squiz.net>
- * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
- * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
- * @version   Release: @package_version@
- * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class CakePHP_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff extends
 	Squiz_Sniffs_Functions_FunctionDeclarationArgumentSpacingSniff {

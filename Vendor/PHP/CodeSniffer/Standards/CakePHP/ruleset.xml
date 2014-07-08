@@ -15,7 +15,6 @@
  <rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
  <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
  <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
- <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
 
  <rule ref="Squiz.Commenting.DocCommentAlignment"/>
  <rule ref="Generic.Commenting.Todo"/>
@@ -37,7 +36,6 @@
  <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
  <rule ref="PSR2.Namespaces.UseDeclaration"/>
 
- <rule ref="Generic.NamingConventions.ConstructorName"/>
  <!--
  Disabled and replaced with local copy. See http://pear.php.net/bugs/bug.php?id=19957
  <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
@@ -65,6 +63,17 @@
  <rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
  <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
  <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
+
+ <!-- Relax commenting rules for test cases -->
+ <rule ref="CakePHP.Commenting.FunctionComment">
+  <!-- 2.x dir structure -->
+  <exclude-pattern>*/Test/Case/*</exclude-pattern>
+  <exclude-pattern>*/Test/test_app/*</exclude-pattern>
+
+  <!-- 3.x dir structure -->
+  <exclude-pattern>*/tests/TestCase/*</exclude-pattern>
+  <exclude-pattern>*/tests/test_app/*</exclude-pattern>
+ </rule>
 
  <!-- All rules in ./Sniffs are included automatically -->
 </ruleset>
