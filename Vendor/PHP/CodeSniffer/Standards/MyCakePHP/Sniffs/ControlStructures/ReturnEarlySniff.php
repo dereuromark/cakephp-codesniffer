@@ -65,8 +65,8 @@ class MyCakePHP_Sniffs_ControlStructures_ReturnEarlySniff implements PHP_CodeSni
 			return;
 		}
 
-		$error = 'The ELSE after an early return is not necessary and should be simplified.';
-		$phpcsFile->addError($error, $stackPtr, 'NotAllowed');
+		$warning = 'The ELSE after an early return is not necessary and should be simplified.';
+		$phpcsFile->addWarning($warning, $stackPtr, 'Warning');
 	}
 
 }
