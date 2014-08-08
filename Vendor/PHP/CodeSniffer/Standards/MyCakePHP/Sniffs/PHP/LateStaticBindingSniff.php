@@ -29,6 +29,9 @@ class MyCakePHP_Sniffs_PHP_LateStaticBindingSniff implements PHP_CodeSniffer_Sni
 	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
+		if (!isset($tokens[$stackPtr]['scope_opener']) || !isset($tokens[$stackPtr]['scope_closer'])) {
+			return;
+		}
 		$opener = $tokens[$stackPtr]['scope_opener'];
 		$closer = $tokens[$stackPtr]['scope_closer'];
 
