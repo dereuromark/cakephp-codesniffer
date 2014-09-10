@@ -55,23 +55,38 @@ class MyCakePHP_Sniffs_PHP_CastSniff implements PHP_CodeSniffer_Sniff {
 			return;
 		}
 
+		// For now we skip on non trivial cases
+		$continue = $lastToken <= ($nextToken + 2);
+		if (!$continue) {
+			return;
+		}
+
 		$error = 'Usage of ' . $tokens[$stackPtr]['content'] . ' not allowed; use casting instead';
 		$phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
+
+		// Try to determine if we can remove the parentheses
+		$removeParentheses = $lastToken <= ($nextToken + 2);
 
 		// Fix the error
 		if ($phpcsFile->fixer->enabled === true) {
 			if ($content === 'floatval') {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($stackPtr, '(float)');
-				$phpcsFile->fixer->replaceToken($nextToken, '');
-				$phpcsFile->fixer->replaceToken($lastToken, '');
+				// Can be removed for trivial arguments
+				if ($removeParentheses) {
+					$phpcsFile->fixer->replaceToken($nextToken, '');
+					$phpcsFile->fixer->replaceToken($lastToken, '');
+				}
 				$phpcsFile->fixer->endChangeset();
 			}
 			if ($content === 'intval') {
 				$phpcsFile->fixer->beginChangeset();
 				$phpcsFile->fixer->replaceToken($stackPtr, '(int)');
-				$phpcsFile->fixer->replaceToken($nextToken, '');
-				$phpcsFile->fixer->replaceToken($lastToken, '');
+				// Can be removed for trivial arguments
+				if ($removeParentheses) {
+					$phpcsFile->fixer->replaceToken($nextToken, '');
+					$phpcsFile->fixer->replaceToken($lastToken, '');
+				}
 				$phpcsFile->fixer->endChangeset();
 			}
 		}

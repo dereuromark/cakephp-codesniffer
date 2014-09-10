@@ -10,6 +10,11 @@ class Foo {
 		$a = (float)$y;
 		$a = (int)$foo;
 		$a = (float)$foo;
+
+		$half = intval($modulus / 2);
+
+		$b = intval(date('G', $time));
+		$b = intval($f + date('G', $time));
 	}
 
 	public function anotherMethod() {
