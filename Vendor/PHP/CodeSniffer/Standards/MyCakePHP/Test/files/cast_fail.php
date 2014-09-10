@@ -13,6 +13,10 @@ class Foo {
 
 		$b = intval(date('G', $time));
 		$b = intval($f + date('G', $time));
+
+		$c = intval($d->oct_length);
+
+		$d = intval($idx->Non_unique == 0);
 	}
 
 	public function anotherMethod() {

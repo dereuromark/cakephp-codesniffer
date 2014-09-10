@@ -73,7 +73,9 @@ class MyCakePHP_Sniffs_PHP_CastSniff implements PHP_CodeSniffer_Sniff {
 		}
 		if (!$removeParentheses) {
 			// If there is no operator in between, it is also fine
-			$whitelist = array(T_PLUS, T_MINUS, T_MODULUS, T_MULTIPLY, T_DIVIDE, T_BITWISE_AND, T_BITWISE_OR, T_BOOLEAN_NOT, T_POWER);
+			$whitelist = array(T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_IS_EQUAL, T_IS_NOT_EQUAL, T_GREATER_THAN, T_LESS_THAN,
+				T_IS_GREATER_OR_EQUAL, T_IS_SMALLER_OR_EQUAL,
+				T_EQUAL, T_PLUS, T_MINUS, T_MODULUS, T_MULTIPLY, T_DIVIDE, T_BITWISE_AND, T_BITWISE_OR, T_BOOLEAN_NOT, T_POWER);
 			$end = !empty($openerToken) ? $openerToken : ($lastToken - 1);
 			$operatorToken = $phpcsFile->findNext($whitelist, ($nextToken + 1), $end);
 			if (!$operatorToken) {
