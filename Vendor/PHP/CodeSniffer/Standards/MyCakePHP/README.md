@@ -14,9 +14,10 @@ After installation you can check code compliance to the standard using
 
 	phpcs --standard=MyCakePHP /path/to/code
 
-### Changes to the CakePHP one
+### Changes to the CakePHP core one
 
-* Detect Yoda conditions.
+* Cast sniff
+* Detect Yoda conditions
 * IsNull sniff
 * IsInt/IsWritable sniff
 * FunctionName sniff

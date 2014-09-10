@@ -6,15 +6,17 @@
 class Foo {
 
 	public function aMethod() {
-		$a = intval($y);
-		$a = floatval($y);
+		$a = (int)$y;
+		$a = (float)$y;
 		$a = (int)$foo;
 		$a = (float)$foo;
 	}
 
 	public function anotherMethod() {
-		$a = $x + (intval($y));
+		$a = $x + ((int)$y);
 		$a = $x + (intval($y, 9));
+		$a = $x + ((int)SomeClass::foo($b, $c, $d));
+		$a = $x + (intval(SomeClass::foo($b, $c, $d), 9));
 	}
 
 }
