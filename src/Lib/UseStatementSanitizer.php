@@ -106,8 +106,8 @@ class UseStatementSanitizer {
 
 			// for class extensions
 			if ($token[0] == T_EXTENDS || $token[0] == T_IMPLEMENTS) {
-				if (isset($t[$key + 2][0]) && $t[$key + 2][0] != T_NAMESPACE) {
-					$useStatements = $this->_getUseStatements(array($key));
+				if (!isset($t[$key + 2][0]) || $t[$key + 2][0] != T_NAMESPACE) {
+					$useStatements = $this->_getDeclarationUseStatements(array($key));
 					$classes = $this->_extractFromUseStatements($useStatements);
 
 					foreach ($classes as $class) {
@@ -217,6 +217,29 @@ class UseStatementSanitizer {
 			}
 		}
 		return $tokenUses;
+	}
+
+	protected function _getDeclarationUseStatements($tokenUses) {
+		$useStatements = array();
+		foreach ($tokenUses as $key => $tokenKey) {
+			$i = $tokenKey;
+			$char = '';
+			$useStatements[$key] = '';
+
+			while ($char !== 'implements' && $char !== ';' && $char !== '{') {
+				++$i;
+				if (!isset($this->content[$i])) {
+					break;
+				}
+				$char = is_string($this->content[$i]) ? $this->content[$i] : $this->content[$i][1];
+				if ($char === 'implements' || $char === '{') {
+					break;
+				}
+				$useStatements[$key] .= $char;
+			}
+		}
+
+		return $this->_extractFromUseStatements($useStatements);
 	}
 
 	protected function _getUseStatements($tokenUses) {
