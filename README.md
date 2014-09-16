@@ -1,5 +1,8 @@
 # CakePHP CodeSniffer Plugin
 
+[![Build Status](https://api.travis-ci.org/dereuromark/cakephp-codesniffer.png?branch=3.0)](https://travis-ci.org/dereuromark/cakephp-codesniffer)
+[![License](https://poser.pugx.org/dereuromark/cakephp-codesniffer/license.svg)](https://packagist.org/packages/dereuromark/cakephp-codesniffer)
+
 **Rewrite for CakePHP 3.0**
 
 Author: Mark Scherer
