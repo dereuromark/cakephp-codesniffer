@@ -27,7 +27,7 @@ Possible dependencies see composer.json
    ```
    {
        "require" : {
-           "dereuromark/cakephp-codesniffer": "3.0-dev"
+           "dereuromark/cakephp-codesniffer": "3.0.x-dev"
        }
    }
    ```
