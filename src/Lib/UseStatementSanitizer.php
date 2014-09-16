@@ -59,9 +59,18 @@ class UseStatementSanitizer {
 	 *
 	 * @return array
 	 */
-	public function getUnused() {
+	public function getUnused($caseInsensitive = false) {
 		$uses = $this->getUseStatements();
 		$usages = $this->getUsages();
+		if ($caseInsensitive) {
+			foreach ($uses as $k => $v) {
+				$uses[$k] = strtolower($v);
+			}
+			foreach ($usages as $k => $v) {
+				$usages[$k] = strtolower($v);
+			}
+		}
+
 		$unused = array();
 
 		foreach ($uses as $use) {
@@ -100,7 +109,11 @@ class UseStatementSanitizer {
 			// for object instanciations
 			if ($token[0] == T_NEW) {
 				if (isset($t[$key + 1][1]) && isset($t[$key + 2][0]) && $t[$key + 2][0] != T_NAMESPACE) {
-					$usages[] = $t[$key + 1][1];
+					if ($t[$key + 1][0] === 384) { // Backslash
+						$usages[] = $t[$key + 2][1];
+					} else {
+						$usages[] = $t[$key + 1][1];
+					}
 				}
 			}
 

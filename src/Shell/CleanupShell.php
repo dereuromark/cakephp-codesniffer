@@ -45,9 +45,14 @@ class CleanupShell extends Shell {
 		}
 		$this->_findFiles('php');
 		$this->out(count($this->_files) . ' files found. Checking ...');
+		$this->count = 0;
 		foreach ($this->_files as $file) {
 			$this->out(sprintf('Checking %s...', $file), 1, Shell::VERBOSE);
 			$this->_checkFile($file);
+		}
+		$this->out('Finished!');
+		if ($this->count) {
+			$this->out('A total of ' . $this->count . ' unused use statement(s) found.');
 		}
 	}
 
@@ -59,14 +64,16 @@ class CleanupShell extends Shell {
 	 */
 	protected function _checkFile($file) {
 		$UseStatementSanitizer = $this->UseStatementSanitizer = new UseStatementSanitizer($file);
-		$unused = $UseStatementSanitizer->getUnused();
+		$unused = $UseStatementSanitizer->getUnused($this->params['case-insensitive']);
 
 		if ($unused) {
 			$this->out($file . ':');
 			foreach ($unused as $u) {
 				$this->out(' - ' . $u);
 			}
-			$this->out(count($unused) . ' unused use statement(s) found.');
+			$count = count($unused);
+			$this->count += $count;
+			$this->out($count . ' unused use statement(s) found.');
 		} else {
 			$this->out($file . ' OK', 1, Shell::VERBOSE);
 		}
@@ -133,6 +140,10 @@ class CleanupShell extends Shell {
 			'help' => 'Plugin name.',
 			'short' => 'p',
 			'default' => ''
+		])->addOption('case-insensitive', [
+			'help' => 'Case insensitive (as PHP does not care about casing).',
+			'short' => 'i',
+			'boolean' => true
 		]);
 
 		return $parser;

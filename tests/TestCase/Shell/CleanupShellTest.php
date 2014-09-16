@@ -61,7 +61,6 @@ class CleanupShellTest extends TestCase {
 		$this->assertNull($result);
 
 		$result = $this->out->output;
-		debug($result);
 
 		$this->assertTextContains('2 files found. Checking', $result);
 
@@ -69,7 +68,9 @@ class CleanupShellTest extends TestCase {
 		$this->assertTextContains('1 unused use statement(s) found', $result);
 
 		$this->assertTextContains('- IteratorIteratorFoo', $result);
-		$this->assertTextContains('3 unused use statement(s) found', $result);
+		$this->assertTextContains('4 unused use statement(s) found', $result);
+
+		$this->assertTextContains('A total of 5 unused use statement(s) found', $result);
 	}
 
 }
