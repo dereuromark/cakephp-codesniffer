@@ -78,6 +78,12 @@ class MdShell extends Shell {
 	 */
 	public function _run($path, $format = null, $ruleset = null, $options = array()) {
 		$commandPath = dirname(dirname(dirname(__FILE__))) . DS . 'vendor' . DS . 'bin' . DS;
+		if (!is_dir($commandPath)) {
+			$commandPath = ROOT . DS . 'bin' . DS;
+		}
+		if (!is_file($commandPath . 'phpmd')) {
+			return $this->error('Could not find bin dir with `phpmd` file.');
+		}
 
 		if (!$format) {
 			$format = 'text';
