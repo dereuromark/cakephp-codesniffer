@@ -5,33 +5,28 @@ use Cake\TestSuite\TestCase;
 use CodeSniffer\Shell\MdShell;
 
 /**
- * StringTest class
+ * MdShellTest class
  *
  */
-class StringTest extends TestCase {
+class MdShellTest extends TestCase {
+
+	public $Md;
 
 	public function setUp() {
 		parent::setUp();
-		$this->Telegram = new Telegram();
+
+		$this->Md = new MdShell();
 	}
 
 	public function tearDown() {
 		parent::tearDown();
-		unset($this->Text);
 	}
 
-	public function testContactList() {
-		$Client = $this->Telegram->createClient();
-
-		$contactList = $Client->getContactList();
-		debug($contactList);
-	}
-
-	public function _testDialog() {
-		$Client = $this->Telegram->createClient();
-
-		$unreadMessages = $Client->getDialogList();
-		debug($unreadMessages);
+	/**
+	 * @return void
+	 */
+	public function testBasic() {
+		//$this->Md->run();
 	}
 
 }

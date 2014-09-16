@@ -21,6 +21,16 @@
 	"require-dev": {
 		"phpunit/phpunit": "*"
 	},
+	"autoload": {
+		"psr-4": {
+			"CodeSniffer\\": "src"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"CodeSniffer\\Test\\": "tests"
+		}
+	},
 	"support": {
 		"source": "https://github.com/dereuromark/cakephp-codesniffer"
 	},
