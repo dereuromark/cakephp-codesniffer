@@ -46,7 +46,7 @@ class CleanupShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testUnusedUse() {
-		$result = $this->Md->runCommand(array('unused_use'), true);
+		$result = $this->Cleanup->runCommand(array('unused_use'), true);
 		$this->assertSame(0, $result);
 
 		$result = $this->out->output;
@@ -58,7 +58,7 @@ class CleanupShellTest extends TestCase {
 	 * @return void
 	 */
 	public function testCustomPath() {
-		$result = $this->Md->runCommand(array('unused_use', $this->testFolder . 'UnusedUse'), true);
+		$result = $this->Cleanup->runCommand(array('unused_use', $this->testFolder . 'UnusedUse'), true);
 		$this->assertSame(0, $result);
 
 		$result = $this->out->output;
