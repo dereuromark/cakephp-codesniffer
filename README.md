@@ -35,19 +35,19 @@ Possible dependencies see composer.json
 2. Load the plugin by adding this line to the bottom of your app's `Config/bootstrap.php`:
 
    ```php
-   CakePlugin::load('CodeSniffer'); // or just CakePlugin::loadAll();
+   Plugin::load('CodeSniffer'); // or just Plugin::loadAll();
    ```
 
 3. That's all! CodeSniffer is ready for use.
 
    ```bash
-   cake CodeSniffer.[ShellName] run [some/optional/path]
+   cake CodeSniffer.[ShellName] run [/some/optional/path]
    ```
 
 ### PHPMD Mess Detector
 The PHPMD lib is included as the following command:
 ```bash
-	cake CodeSniffer.Md run [some/optional/path]
+	cake CodeSniffer.Md run [/some/optional/path]
  ```
 If you do not provide a path, it will automatically run the sniffer for your APP (root) path, (usually `/src` + `/tests`).
 
@@ -70,6 +70,7 @@ Pro-tips:
 - You can specicy multiple source directories in case you want to create one output for certain parts of your code:
   `cake CodeSniffer.Md run /path1/,/path2,...`.
 - Leverage the exit codes 0,1,2 for Travis/Jenkins CI.
+- You can use shell aliasing to make the command shorter - even `md [/some/optional/path]` etc.
 
 For details and more tips see [github.com/phpmd/phpmd](https://github.com/phpmd/phpmd).
 
