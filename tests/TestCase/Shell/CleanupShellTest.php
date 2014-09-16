@@ -20,7 +20,7 @@ class TestCleanupShellOutput extends ConsoleOutput {
 
 }
 
-class CleanupShellTest extends CakeTestCase {
+class CleanupShellTest extends TestCase {
 
 	public $Cleanup;
 
@@ -28,6 +28,8 @@ class CleanupShellTest extends CakeTestCase {
 
 	public function setUp() {
 		parent::setUp();
+
+		Configure::write('debug', true);
 
 		$this->out = new TestCleanupShellOutput();
 		$io = new ConsoleIo($this->out);
@@ -50,5 +52,18 @@ class CleanupShellTest extends CakeTestCase {
 		$result = $this->out->output;
 		debug($result);
 	}
+
+
+	/**
+	 * @return void
+	 */
+	public function testCustomPath() {
+		$result = $this->Md->runCommand(array('unused_use', $this->testFolder . 'UnusedUse'), true);
+		$this->assertSame(0, $result);
+
+		$result = $this->out->output;
+		debug($result);
+	}
+
 
 }
