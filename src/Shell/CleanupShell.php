@@ -1,6 +1,9 @@
 <?php
-App::uses('AppShell', 'Console/Command');
-App::uses('UseStatementSanitizer', 'CodeSniffer.Lib');
+namespace CodeSniffer\Shell;
+
+use Cake\Console\Shell;
+use Cake\Core\Plugin;
+use CodeSniffer\Lib\UseStatementSanitizer;
 
 /**
  * CakePHP Cleanup shell
@@ -9,9 +12,7 @@ App::uses('UseStatementSanitizer', 'CodeSniffer.Lib');
  * @link http://www.dereuromark.de
  * @license MIT License
  */
-class CleanupShell extends AppShell {
-
-	public $report = array();
+class CleanupShell extends Shell {
 
 	protected $_customPaths = array();
 
@@ -20,10 +21,10 @@ class CleanupShell extends AppShell {
 	 */
 	public function startup() {
 		if (!empty($this->args[0])) {
-			$cutomPath = realpath($this->args[0]);
+			$customPath = realpath($this->args[0]);
 		}
-		if ($cutomPath) {
-			$this->_customPaths[] = $cutomPath;
+		if (!empty($customPath)) {
+			$this->_customPaths[] = $customPath;
 		}
 		$this->out("<info>Codesniffer.Cleanup shell</info> for CakePHP", 2);
 	}
@@ -33,17 +34,17 @@ class CleanupShell extends AppShell {
 	 *
 	 * @return void
 	 */
-	public function unused_use() {
+	public function unusedUse() {
 		if (!empty($this->_customPaths)) {
 			$this->_paths = $this->_customPaths;
 		} elseif (!empty($this->params['plugin'])) {
-			$pluginpath = App::pluginPath($this->params['plugin']);
+			$pluginpath = Plugin::path($this->params['plugin']);
 			$this->_paths = array($pluginpath);
 		} else {
-			$this->_paths = array(APP);
+			$this->_paths = array(ROOT);
 		}
 		$this->_findFiles('php');
-		$this->out(count($this->_files) . ' files');
+		$this->out(count($this->_files) . ' files found. Checking ...');
 		foreach ($this->_files as $file) {
 			$this->out(__d('cake_console', 'Checking %s...', $file), 1, Shell::VERBOSE);
 			$this->_checkFile($file);
@@ -82,16 +83,15 @@ class CleanupShell extends AppShell {
 			if (!is_dir($path)) {
 				continue;
 			}
-			$Iterator = new RegexIterator(
-				new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path)),
+			$Iterator = new \RegexIterator(
+				new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)),
 				'/^.+\.(' . $extensions . ')$/i',
-				RegexIterator::MATCH
+				\RegexIterator::MATCH
 			);
 			foreach ($Iterator as $file) {
-				$excludes = array('Vendor', 'vendors');
+				$excludes = array('vendor');
 				//Iterator processes plugins/vendors even if not asked to
 				if (empty($this->params['plugin'])) {
-					$excludes[] = 'Plugin';
 					$excludes[] = 'plugins';
 				}
 
@@ -114,21 +114,25 @@ class CleanupShell extends AppShell {
 	}
 
 	/**
-	 * Add options
+	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 
-		$parser->addOptions(array(
-			'dry-run' => array(
-				'short' => 'd', 'boolean' => true, 'help' => 'Dry Run'
-			),
-			'plugin' => array('short' => 'p', 'help' => 'Plugin', 'default' => '')
-		))
-		->addSubcommand('unused_use', array(
+		$parser->description(
+			'Useful cleanup commands for CakePHP projects and more.'
+		)->addSubcommand('unused_use', array(
 			'help' => __d('cake_console', 'Check for unnecessary `use` statements.'),
-			//'parser' => $parser
-		));
+			'parser' => $parser
+		))->addOption('dry-run', [
+			'help' => 'Dry-run it.',
+			'short' => 'd',
+			'boolean' => true
+		])->addOption('plugin', [
+			'help' => 'Plugin name.',
+			'short' => 'p',
+			'default' => ''
+		]);
 
 		return $parser;
 	}

@@ -1,7 +1,4 @@
 <?php
-/**
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
 namespace CodeSniffer\Shell;
 
 use Cake\Console\Shell;
