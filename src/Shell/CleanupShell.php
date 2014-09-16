@@ -122,7 +122,7 @@ class CleanupShell extends Shell {
 		$parser->description(
 			'Useful cleanup commands for CakePHP projects and more.'
 		)->addSubcommand('unused_use', array(
-			'help' => __d('cake_console', 'Check for unnecessary `use` statements.'),
+			'help' => 'Check for unnecessary `use` statements.',
 			'parser' => $parser
 		))->addOption('dry-run', [
 			'help' => 'Dry-run it.',
