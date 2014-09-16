@@ -62,6 +62,7 @@ By default it
 - creates a log file in TMP for larger error reports where the console screen can't hold that much information)
 
 Tips:
+- Use `-v` for more output/infos.
 - To run it on a plugin, use `-p PluginName`.
 - To display on screen instead of logging away use `-f display`.
 - To use all rulesets, use `-r *`
@@ -77,6 +78,19 @@ Pro-tips:
 - You can use shell aliasing to make the command shorter - even `md [/some/optional/path]` etc.
 
 For details and more tips see [github.com/phpmd/phpmd](https://github.com/phpmd/phpmd).
+
+### Cleanup
+The Cleanup shell has some nice tools for code cleanup:
+```bash
+	cake CodeSniffer.Cleanup unused_use [/some/optional/path]
+ ```
+If you do not provide a path, it will automatically run the sniffer for your APP (root) path, (usually `/src` + `/tests`).
+
+By default it checks all PHP files for the use statements and which are not necessary because the included classes are never used.
+
+Tips:
+- Use `-v` for more output/infos.
+- To run it on a plugin, use `-p PluginName`.
 
 ### PHPCS
 ... coming up
