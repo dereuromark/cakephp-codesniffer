@@ -32,7 +32,7 @@ class MdShell extends Shell {
 	/**
 	 * MdShell::run()
 	 *
-	 * @return void
+	 * @return int Status
 	 */
 	public function run() {
 		$this->out('Running PHPMD Mess Detector...', 2);
@@ -63,8 +63,7 @@ class MdShell extends Shell {
 		$format = $this->params['format'];
 		$ruleset = $this->params['ruleset'];
 
-		$result = $this->_run($path, $format, $ruleset, $options);
-		exit($result);
+		return $this->_run($path, $format, $ruleset, $options);
 	}
 
 	/**
@@ -140,7 +139,7 @@ class MdShell extends Shell {
 
 		$this->out('Done :)');
 		if ($output) {
-			$this->out('Found '. count($output).' issue(s).');
+			$this->out('Found '. count($output).' issue(s):');
 		}
 		if ($output && $this->params['verbose']) {
 			foreach ($output as $k => $v) {
