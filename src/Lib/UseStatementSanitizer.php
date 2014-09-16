@@ -99,14 +99,14 @@ class UseStatementSanitizer {
 
 			// for object instanciations
 			if ($token[0] == T_NEW) {
-				if ($t[$key + 2][0] != T_NAMESPACE) {
+				if (isset($t[$key + 1][1]) && isset($t[$key + 2][0]) && $t[$key + 2][0] != T_NAMESPACE) {
 					$usages[] = $t[$key + 1][1];
 				}
 			}
 
 			// for class extensions
 			if ($token[0] == T_EXTENDS || $token[0] == T_IMPLEMENTS) {
-				if ($t[$key + 2][0] != T_NAMESPACE) {
+				if (isset($t[$key + 2][0]) && $t[$key + 2][0] != T_NAMESPACE) {
 					$useStatements = $this->_getUseStatements(array($key));
 					$classes = $this->_extractFromUseStatements($useStatements);
 

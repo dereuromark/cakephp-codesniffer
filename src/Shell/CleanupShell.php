@@ -46,7 +46,7 @@ class CleanupShell extends Shell {
 		$this->_findFiles('php');
 		$this->out(count($this->_files) . ' files found. Checking ...');
 		foreach ($this->_files as $file) {
-			$this->out(__d('cake_console', 'Checking %s...', $file), 1, Shell::VERBOSE);
+			$this->out(sprintf('Checking %s...', $file), 1, Shell::VERBOSE);
 			$this->_checkFile($file);
 		}
 	}
@@ -66,6 +66,7 @@ class CleanupShell extends Shell {
 			foreach ($unused as $u) {
 				$this->out(' - ' . $u);
 			}
+			$this->out(count($unused) . ' unused use statement(s) found.');
 		} else {
 			$this->out($file . ' OK', 1, Shell::VERBOSE);
 		}

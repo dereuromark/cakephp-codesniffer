@@ -47,22 +47,26 @@ class CleanupShellTest extends TestCase {
 	 */
 	public function testUnusedUse() {
 		$result = $this->Cleanup->runCommand(array('unused_use'), true);
-		$this->assertSame(0, $result);
+		$this->assertNull($result);
 
 		$result = $this->out->output;
-		debug($result);
+		$this->assertNotEmpty($result);
 	}
 
 
 	/**
 	 * @return void
 	 */
-	public function testCustomPath() {
+	public function testUnusedUseCustomPath() {
 		$result = $this->Cleanup->runCommand(array('unused_use', $this->testFolder . 'UnusedUse'), true);
-		$this->assertSame(0, $result);
+		$this->assertNull($result);
 
 		$result = $this->out->output;
-		debug($result);
+		//debug($result);
+
+		$this->assertTextContains('1 files found. Checking', $result);
+		$this->assertTextContains('- SomeOtherClass', $result);
+		$this->assertTextContains('1 unused use statement(s) found', $result);
 	}
 
 
