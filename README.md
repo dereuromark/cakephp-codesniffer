@@ -6,8 +6,11 @@ Author: Mark Scherer
 
 License: MIT
 
-The plugin provides a quick way to run your (default) sniffer rules on your app - or part (Plugin for example) of it.
+The plugin provides a quick way to run your (default) sniffer rules on your app - or part (plugin for example) of it.
 It comes with good default settings for CakePHP apps and works out of the box as self-contained system.
+Additionally it allows the usual CakePHP handling regarding shells and adds a few goodies on top.
+
+You can also always just run the base commands manually, but the shell really helps to keep things DRY and easy.
 
 ## Requirements
 
