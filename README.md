@@ -26,9 +26,9 @@ Possible dependencies see composer.json
 
    ```
    {
-     "require" : {
-       "dereuromark/cakephp-codesniffer": "3.0-dev"
-     }
+       "require" : {
+           "dereuromark/cakephp-codesniffer": "3.0-dev"
+       }
    }
    ```
 
@@ -80,12 +80,13 @@ For details and more tips see [github.com/phpmd/phpmd](https://github.com/phpmd/
 
 By default it uses the pre-defined settings.
 You can overwrite the default at runtime or globally using your APP configs:
+```php
+// Use our own ruleset "codesize" as default
+Configure::write('CodeSniffer.ruleset', 'codesize');
 
-	// Use our own ruleset "codesize" as default
-	Configure::write('CodeSniffer.ruleset', 'codesize');
-
-	// A "custom" ruleset that is somewhere else on your file system
-	Configure::write('CodeSniffer.ruleset', '/absolute/path/to/custom.xml');
+// A "custom" ruleset that is somewhere else on your file system
+Configure::write('CodeSniffer.ruleset', '/absolute/path/to/custom.xml');
+```
 
 Same applies for all other config keys.
 
