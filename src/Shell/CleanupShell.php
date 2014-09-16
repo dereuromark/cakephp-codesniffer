@@ -43,6 +43,7 @@ class CleanupShell extends Shell {
 		} else {
 			$this->_paths = array(ROOT);
 		}
+		$this->out('Path: ' . implode(', ' , $this->_paths));
 		$this->_findFiles('php');
 		$this->out(count($this->_files) . ' files found. Checking ...');
 		$this->count = 0;
@@ -66,6 +67,7 @@ class CleanupShell extends Shell {
 		$UseStatementSanitizer = $this->UseStatementSanitizer = new UseStatementSanitizer($file);
 		$unused = $UseStatementSanitizer->getUnused($this->params['case-insensitive']);
 
+		$file = str_replace(ROOT, '', $file);
 		if ($unused) {
 			$this->out($file . ':');
 			foreach ($unused as $u) {
@@ -73,7 +75,7 @@ class CleanupShell extends Shell {
 			}
 			$count = count($unused);
 			$this->count += $count;
-			$this->out($count . ' unused use statement(s) found.');
+			$this->out('(' . $count . ' unused use statement(s) found)');
 		} else {
 			$this->out($file . ' OK', 1, Shell::VERBOSE);
 		}
