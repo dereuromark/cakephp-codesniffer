@@ -14,6 +14,11 @@ class UseStatementSanitizer {
 
 	public $content;
 
+	/**
+	 * UseStatementSanitizer::__construct()
+	 *
+	 * @param string $file File
+	 */
 	public function __construct($file) {
 		$this->content = token_get_all(file_get_contents($file));
 		foreach ($this->content as $key => $val) {
@@ -31,22 +36,22 @@ class UseStatementSanitizer {
 				$i--;
 			}
 
-   		if ($val === '(') {
-   			$val = array(
+			if ($val === '(') {
+				$val = array(
 				 	T_OPEN_PARENTHESIS,
 					$val,
 					$line
 				);
-   		}
-   		if ($val === ')') {
-   			$val = array(
+			}
+			if ($val === ')') {
+				$val = array(
 				 	T_CLOSE_PARENTHESIS,
 					$val,
 					$line
 				);
-   		}
+			}
 
-   		$this->content[$key] = $val;
+			$this->content[$key] = $val;
 		}
 
 		// we don't need and want them while parsing
@@ -57,7 +62,8 @@ class UseStatementSanitizer {
 	/**
 	 * UseStatementSanitizer::getUnused()
 	 *
-	 * @return array
+	 * @param bool $caseInsensitive If case insensitive.
+	 * @return array Unused
 	 */
 	public function getUnused($caseInsensitive = false) {
 		$uses = $this->getUseStatements();
@@ -177,13 +183,24 @@ class UseStatementSanitizer {
 		return array_values(array_unique($usages));
 	}
 
+	/**
+	 * UseStatementSanitizer::_extractFromUse()
+	 *
+	 * @return array
+	 */
 	protected function _extractFromUse() {
 		$tokenUses = $this->_getTokenUses(T_USE, 1);
 
-		$useStatements = $this->_getUseStatements($tokenUses);
-		return $useStatements;
+		return $this->_getUseStatements($tokenUses);
 	}
 
+	/**
+	 * UseStatementSanitizer::_extractFromParentheses()
+	 *
+	 * @param mixed $start Start
+	 * @param mixed $end End
+	 * @return array
+	 */
 	protected function _extractFromParentheses($start, $end) {
 		if ($end <= $start) {
 			return array();
@@ -207,6 +224,13 @@ class UseStatementSanitizer {
 		return $classes;
 	}
 
+	/**
+	 * UseStatementSanitizer::_getTokenUses()
+	 *
+	 * @param mixed $tokenKey
+	 * @param mixed $onlyLevel
+	 * @return array
+	 */
 	protected function _getTokenUses($tokenKey, $onlyLevel = null) {
 		$tokenUses = array();
 		$level = 0;
@@ -232,6 +256,12 @@ class UseStatementSanitizer {
 		return $tokenUses;
 	}
 
+	/**
+	 * UseStatementSanitizer::_getDeclarationUseStatements()
+	 *
+	 * @param array $tokenUses
+	 * @return array
+	 */
 	protected function _getDeclarationUseStatements($tokenUses) {
 		$useStatements = array();
 		foreach ($tokenUses as $key => $tokenKey) {
@@ -255,6 +285,12 @@ class UseStatementSanitizer {
 		return $this->_extractFromUseStatements($useStatements);
 	}
 
+	/**
+	 * UseStatementSanitizer::_getUseStatements()
+	 *
+	 * @param array $tokenUses
+	 * @return array
+	 */
 	protected function _getUseStatements($tokenUses) {
 		$useStatements = array();
 
@@ -290,6 +326,12 @@ class UseStatementSanitizer {
 		return $this->_extractFromUseStatements($useStatements);
 	}
 
+	/**
+	 * UseStatementSanitizer::_extractFromUseStatements()
+	 *
+	 * @param array $useStatements Use statements
+	 * @return array
+	 */
 	protected function _extractFromUseStatements($useStatements) {
 		$allUses = array();
 
@@ -324,7 +366,7 @@ class UseStatementSanitizer {
 	/**
 	 * UseStatementSanitizer::removeTokens()
 	 *
-	 * @param int $tokenId
+	 * @param int $tokenId Token Id
 	 * @return void
 	 */
 	public function removeTokens($tokenId) {

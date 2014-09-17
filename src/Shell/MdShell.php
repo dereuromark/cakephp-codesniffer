@@ -66,10 +66,10 @@ class MdShell extends Shell {
 	/**
 	 * MdShell::_run()
 	 *
-	 * @param string $path
-	 * @param string $format
-	 * @param string $ruleset
-	 * @param array $options
+	 * @param string $path Path
+	 * @param string $format Format
+	 * @param string $ruleset Ruleset
+	 * @param array $options Options
 	 * @return int Status
 	 */
 	public function _run($path, $format = null, $ruleset = null, $options = array()) {

@@ -18,6 +18,8 @@ class CleanupShell extends Shell {
 
 	/**
 	 * Welcome message
+	 *
+	 * @return void
 	 */
 	public function startup() {
 		if (!empty($this->args[0])) {
@@ -60,7 +62,7 @@ class CleanupShell extends Shell {
 	/**
 	 * CsShell::_checkFile()
 	 *
-	 * @param string $file
+	 * @param string $file File
 	 * @return void
 	 */
 	protected function _checkFile($file) {
@@ -84,7 +86,7 @@ class CleanupShell extends Shell {
 	/**
 	 * Searches the paths and finds files based on extension.
 	 *
-	 * @param string $extensions
+	 * @param string $extensions Extensions
 	 * @return void
 	 */
 	protected function _findFiles($extensions = '') {
@@ -124,6 +126,8 @@ class CleanupShell extends Shell {
 	}
 
 	/**
+	 * Get option parser.
+	 *
 	 * @return \Cake\Console\ConsoleOptionParser
 	 */
 	public function getOptionParser() {
