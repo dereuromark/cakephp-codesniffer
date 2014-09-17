@@ -2,6 +2,7 @@ language: php
 
 php:
   - 5.4
+  - 5.5
 
 env:
   matrix:
@@ -40,9 +41,9 @@ before_script:
   - cp phpunit.xml.dist phpunit.xml
 
 script:
-  - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --stderr --coverage-clover build/logs/clover.xml; fi"
+  - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --coverage-clover build/logs/clover.xml; fi"
   - sh -c "if [ '$COVERALLS' = '1' ]; then php vendor/bin/coveralls -c .coveralls.yml -v; fi"
-  - sh -c "if [ '$DEFAULT' = '1' ]; then phpunit --stderr; fi"
+  - sh -c "if [ '$DEFAULT' = '1' ]; then phpunit; fi"
   - sh -c "if [ '$PHPCS' = '1' ]; then phpcs -p --extensions=php --standard=CakePHP --ignore=vendor --ignore=Test --ignore=docs . ; fi"
 
 notifications:
