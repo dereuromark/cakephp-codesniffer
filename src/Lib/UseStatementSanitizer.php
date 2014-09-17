@@ -69,19 +69,31 @@ class UseStatementSanitizer {
 		$uses = $this->getUseStatements();
 		$usages = $this->getUsages();
 
-		if ($caseInsensitive) {
-			foreach ($uses as $k => $v) {
-				$uses[$k] = strtolower($v);
-			}
-			foreach ($usages as $k => $v) {
-				$usages[$k] = strtolower($v);
-			}
+		$usesCI = $usagesCI = array();
+		foreach ($uses as $k => $v) {
+			$usesCI[$k] = strtolower($v);
+		}
+		foreach ($usages as $k => $v) {
+			$usagesCI[$k] = strtolower($v);
 		}
 
 		$unused = array();
 
+		if ($caseInsensitive) {
+			foreach ($usesCI as $key => $use) {
+				if (!in_array($use, $usagesCI)) {
+					$unused[] = $uses[$key];
+				}
+			}
+			return $unused;
+		}
+
+		//FIXME: remove some of the non class stuff in $usages to avoid false positives
 		foreach ($uses as $use) {
 			if (!in_array($use, $usages)) {
+				if (in_array(strtolower($use), $usagesCI)) {
+					$use .= ' (casing mismatch?)';
+				}
 				$unused[] = $use;
 			}
 		}
@@ -116,7 +128,7 @@ class UseStatementSanitizer {
 			// for object instanciations
 			if ($token[0] == T_NEW) {
 				if (isset($t[$key + 1][1]) && isset($t[$key + 2][0]) && $t[$key + 2][0] != T_NAMESPACE) {
-					if ($t[$key + 1][0] === 384) { // Backslash
+					if ($t[$key + 1][0] === T_NS_SEPARATOR) {
 						$usages[] = $t[$key + 2][1];
 					} else {
 						$usages[] = $t[$key + 1][1];
