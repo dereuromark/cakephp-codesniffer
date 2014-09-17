@@ -61,6 +61,7 @@ class CleanupShellTest extends TestCase {
 		$this->assertNull($result);
 
 		$result = $this->out->output;
+		debug($result);
 
 		$this->assertTextContains('2 files found. Checking', $result);
 
