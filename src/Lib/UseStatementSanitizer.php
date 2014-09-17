@@ -38,14 +38,14 @@ class UseStatementSanitizer {
 
 			if ($val === '(') {
 				$val = array(
-				 	T_OPEN_PARENTHESIS,
+					T_OPEN_PARENTHESIS,
 					$val,
 					$line
 				);
 			}
 			if ($val === ')') {
 				$val = array(
-				 	T_CLOSE_PARENTHESIS,
+					T_CLOSE_PARENTHESIS,
 					$val,
 					$line
 				);
@@ -227,8 +227,8 @@ class UseStatementSanitizer {
 	/**
 	 * UseStatementSanitizer::_getTokenUses()
 	 *
-	 * @param mixed $tokenKey
-	 * @param mixed $onlyLevel
+	 * @param mixed $tokenKey Token key
+	 * @param mixed $onlyLevel Only level
 	 * @return array
 	 */
 	protected function _getTokenUses($tokenKey, $onlyLevel = null) {
@@ -259,7 +259,7 @@ class UseStatementSanitizer {
 	/**
 	 * UseStatementSanitizer::_getDeclarationUseStatements()
 	 *
-	 * @param array $tokenUses
+	 * @param array $tokenUses Token uses
 	 * @return array
 	 */
 	protected function _getDeclarationUseStatements($tokenUses) {
@@ -288,7 +288,7 @@ class UseStatementSanitizer {
 	/**
 	 * UseStatementSanitizer::_getUseStatements()
 	 *
-	 * @param array $tokenUses
+	 * @param array $tokenUses Token uses
 	 * @return array
 	 */
 	protected function _getUseStatements($tokenUses) {
