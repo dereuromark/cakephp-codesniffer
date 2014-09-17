@@ -68,6 +68,7 @@ class UseStatementSanitizer {
 	public function getUnused($caseInsensitive = false) {
 		$uses = $this->getUseStatements();
 		$usages = $this->getUsages();
+
 		if ($caseInsensitive) {
 			foreach ($uses as $k => $v) {
 				$uses[$k] = strtolower($v);
