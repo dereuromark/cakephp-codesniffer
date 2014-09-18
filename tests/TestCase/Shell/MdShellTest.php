@@ -55,9 +55,6 @@ class MdShellTest extends TestCase {
 	public function _testBasic() {
 		$result = $this->Md->runCommand(array('run'), true);
 		$this->assertSame(0, $result);
-
-		$report = file_get_contents(TMP . 'report.txt');
-		debug($report);
 	}
 
 	/**

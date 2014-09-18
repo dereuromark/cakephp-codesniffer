@@ -2,8 +2,12 @@
 
 namespace CodeSniffer\Lib;
 
-define('T_OPEN_PARENTHESIS', 1004);
-define('T_CLOSE_PARENTHESIS', 1005);
+if (!defined('T_OPEN_PARENTHESIS_CUSTOM')) {
+	define('T_OPEN_PARENTHESIS_CUSTOM', 1004);
+}
+if (!defined('T_CLOSE_PARENTHESIS_CUSTOM')) {
+	define('T_CLOSE_PARENTHESIS_CUSTOM', 1005);
+}
 
 /**
  * A class that can remove unncessary use imports in PHP class files.
@@ -38,14 +42,14 @@ class UseStatementSanitizer {
 
 			if ($val === '(') {
 				$val = array(
-					T_OPEN_PARENTHESIS,
+					T_OPEN_PARENTHESIS_CUSTOM,
 					$val,
 					$line
 				);
 			}
 			if ($val === ')') {
 				$val = array(
-					T_CLOSE_PARENTHESIS,
+					T_CLOSE_PARENTHESIS_CUSTOM,
 					$val,
 					$line
 				);
@@ -163,17 +167,17 @@ class UseStatementSanitizer {
 			}
 
 			// for object typehints
-			if ($token[0] == T_OPEN_PARENTHESIS) {
+			if ($token[0] == T_OPEN_PARENTHESIS_CUSTOM) {
 				$deep = 0;
 				$start = $key;
 				$end = 0;
 				$i = $start + 1;
 				while (isset($t[$i])) {
-					if ($t[$i][0] == T_OPEN_PARENTHESIS) {
+					if ($t[$i][0] == T_OPEN_PARENTHESIS_CUSTOM) {
 						$deep++;
 					}
 
-					if ($t[$i][0] == T_CLOSE_PARENTHESIS) {
+					if ($t[$i][0] == T_CLOSE_PARENTHESIS_CUSTOM) {
 						if ($deep === 0) {
 							$end = $i;
 							break;
