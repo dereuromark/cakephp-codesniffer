@@ -21,7 +21,7 @@ class TestCsShellOutput extends ConsoleOutput {
 
 }
 
-class CodeSnifferShellTest extends TestCase {
+class CsShellTest extends TestCase {
 
 	public $Cs;
 
@@ -42,7 +42,7 @@ class CodeSnifferShellTest extends TestCase {
 	}
 
 	/**
-	 * CodeSnifferShellTest::testTokenize()
+	 * CsShellTest::testTokenize()
 	 *
 	 * @return void
 	 */
@@ -67,6 +67,67 @@ class CodeSnifferShellTest extends TestCase {
 		$result = $this->Cs->runCommand(array('tokenize', $path, '-v'), true);
 
 		$this->assertTrue(file_exists($folder . 'test2.php.token'));
+	}
+
+	/**
+	 * CsShellTest::testRun()
+	 *
+	 * @return void
+	 */
+	public function testRun() {
+		$folder = TMP . 'Cs' . DS;
+		if (!is_dir($folder)) {
+			mkdir($folder, 0770, true);
+		}
+
+		// normal output
+		copy($this->Cs->testPath . 'Cs' . DS . 'test.php', $folder . 'test.php');
+		$path = $folder . 'test.php';
+
+		$result = $this->Cs->runCommand(array('run', $path), true);
+		$this->assertSame(1, $result);
+
+		$this->assertTrue(file_exists(TMP . 'phpcs.txt'));
+
+		$result = file_get_contents(TMP . 'phpcs.txt');
+		$this->assertTextContains('[x] Opening brace should be on a new line', $result);
+
+		$output = $this->out->output;
+		$this->assertTextContains('For details check the phpcs.txt file in your TMP folder', $output);
+	}
+
+	/**
+	 * CsShellTest::testRunFix()
+	 *
+	 * @return void
+	 */
+	public function testRunFix() {
+		$folder = TMP . 'Cs' . DS;
+		if (!is_dir($folder)) {
+			mkdir($folder, 0770, true);
+		}
+
+		// normal output
+		copy($this->Cs->testPath . 'Cs' . DS . 'test.php', $folder . 'test.php');
+		$path = $folder . 'test.php';
+
+		$result = $this->Cs->runCommand(array('run', $path, '-f'), true);
+		$this->assertSame(1, $result);
+
+		$result = file_get_contents($folder . 'test.php');
+
+		// Running it again should now show all OK (as auto-fixer corrected them).
+		$result = $this->Cs->runCommand(array('run', $path), true);
+		$this->assertSame(0, $result);
+
+		$result = file_get_contents(TMP . 'phpcs.txt');
+		$this->assertSame('', trim($result));
+
+		$output = $this->out->output;
+		//debug($output);
+
+		$result = file_get_contents($folder . 'test.php');
+		//debug($result);
 	}
 
 }

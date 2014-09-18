@@ -60,7 +60,7 @@ class CsShell extends Shell {
 	 * Catch-all for CodeSniffer commands
 	 *
 	 * @link http://pear.php.net/manual/en/package.php.php-codesniffer.usage.php
-	 * @return void
+	 * @return int Exit code
 	 */
 	public function run() {
 		// for larger PHP files we need some more memory
@@ -133,11 +133,12 @@ class CsShell extends Shell {
 		// as they decide if it is ok to print this data to screen.
 		@include_once 'PHP/Timer.php';
 		if (class_exists('PHP_Timer', false) === true) {
-			PHP_Timer::start();
+			\PHP_Timer::start();
 		}
 
-		$this->_process();
+		$exit = $this->_process();
 		$this->out('For details check the phpcs.txt file in your TMP folder.');
+		return $exit;
 	}
 
 	/**
@@ -413,31 +414,32 @@ class CsShell extends Shell {
 	}
 
 	/**
-	 * @return void
+	 * @return int Exit code
 	 */
 	public function test() {
-		$this->_checkCodeSniffer();
+		return $this->_checkCodeSniffer();
 	}
 
 	/**
 	 * Check if CodeSniffer.phar is available
 	 * Offer to install if it isn't available
+	 *
+	 * @return int Exit code
 	 */
 	protected function _checkCodeSniffer() {
 		$_SERVER['argv'] = array();
 		$_SERVER['argv'][] = 'phpcs';
 		$_SERVER['argv'][] = '--version';
 
-		$this->_process();
+		return $this->_process();
 	}
 
 	/**
 	 * CodeSnifferShell::_process()
 	 *
-	 * @return int Exit
+	 * @return int Exit code
 	 */
 	protected function _process() {
-		//include_once 'PHP/CodeSniffer/CLI.php';
 		$phpcs = new \PHP_CodeSniffer_CLI();
 		$phpcs->checkRequirements();
 
@@ -490,7 +492,10 @@ class CsShell extends Shell {
 		}
 
 		if ($numErrors !== 0) {
-			$this->err('An error occured during processing.');
+			if ($exit === 0) {
+				$exit = 1;
+			}
+			$this->out('An error occured during processing.');
 		}
 
 		return $exit;
