@@ -83,6 +83,27 @@ class CsShellTest extends TestCase {
 		$path = $folder . 'test.php';
 
 		$result = $this->Cs->runCommand(array('run', $path), true);
+		$this->assertSame(0, $result);
+
+		$this->assertTrue(file_exists(TMP . 'phpcs.txt'));
+	}
+
+	/**
+	 * CsShellTest::testRun()
+	 *
+	 * @return void
+	 */
+	public function testRunZend() {
+		$folder = TMP . 'Cs' . DS;
+		if (!is_dir($folder)) {
+			mkdir($folder, 0770, true);
+		}
+
+		// normal output
+		copy($this->Cs->testPath . 'Cs' . DS . 'test.php', $folder . 'test.php');
+		$path = $folder . 'test.php';
+
+		$result = $this->Cs->runCommand(array('run', $path, '-s', 'Zend'), true);
 		$this->assertSame(1, $result);
 
 		$this->assertTrue(file_exists(TMP . 'phpcs.txt'));
@@ -99,7 +120,7 @@ class CsShellTest extends TestCase {
 	 *
 	 * @return void
 	 */
-	public function testRunFix() {
+	public function testRunFixZend() {
 		$folder = TMP . 'Cs' . DS;
 		if (!is_dir($folder)) {
 			mkdir($folder, 0770, true);
@@ -109,23 +130,33 @@ class CsShellTest extends TestCase {
 		copy($this->Cs->testPath . 'Cs' . DS . 'test.php', $folder . 'test.php');
 		$path = $folder . 'test.php';
 
-		$result = $this->Cs->runCommand(array('run', $path, '-f'), true);
+		$result = $this->Cs->runCommand(array('run', $path, '-f', '-s', 'Zend'), true);
 		$this->assertSame(1, $result);
 
-		$result = file_get_contents($folder . 'test.php');
-
-		// Running it again should now show all OK (as auto-fixer corrected them).
-		$result = $this->Cs->runCommand(array('run', $path), true);
-		$this->assertSame(0, $result);
+		$output = $this->out->output;
+		$this->assertTextContains('An error occured during processing.', $output);
 
 		$result = file_get_contents(TMP . 'phpcs.txt');
-		$this->assertSame('', trim($result));
+		$this->assertNotEmpty(trim($result));
+
+		$result1 = file_get_contents($folder . 'test.php');
+		$this->assertNotEmpty(trim($result1));
+
+		// Running it again should now show all OK (as auto-fixer corrected them).
+		$this->out->output = null;
+		file_put_contents(TMP . 'phpcs.txt', '');
+
+		$result = $this->Cs->runCommand(array('run', $path, '-s', 'Zend'), true);
+		$this->assertSame(0, $result);
 
 		$output = $this->out->output;
-		//debug($output);
+		$this->assertTextNotContains('An error occured during processing.', $output);
 
-		$result = file_get_contents($folder . 'test.php');
-		//debug($result);
+		$result = file_get_contents(TMP . 'phpcs.txt');
+		$this->assertEmpty(trim($result));
+
+		$result2 = file_get_contents($folder . 'test.php');
+		$this->assertSame($result1, $result2);
 	}
 
 }

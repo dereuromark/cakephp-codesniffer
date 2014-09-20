@@ -28,3 +28,4 @@ define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 Cake\Core\Configure::write('App', [
 	'namespace' => 'App'
 ]);
+Cake\Core\Configure::write('debug', true);
