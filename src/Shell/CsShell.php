@@ -8,7 +8,7 @@ use Cake\Utility\Inflection;
 use CodeSniffer\Utility\Utility;
 
 if (!defined('WINDOWS')) {
-	if (DS == '\\' || substr(PHP_OS, 0, 3) == 'WIN') {
+	if (DS == '\\' || substr(PHP_OS, 0, 3) === 'WIN') {
 		define('WINDOWS', true);
 	} else {
 		define('WINDOWS', false);
@@ -51,8 +51,13 @@ class CsShell extends Shell {
 		if ($standard = Configure::read('CodeSniffer.standard')) {
 			$this->standard = $standard;
 		}
-		//FIXME: add other ones
-		$this->standard = 'Zend';
+
+		$vendorPath = ROOT . DS . 'vendor' . DS; //Plugin::path('CodeSniffer');
+		$path = $vendorPath . 'dereuromark' . DS . 'codesniffer-standards' . DS;
+		\PHP_CodeSniffer::setConfigData('installed_paths', $path);
+
+		$x = \PHP_CodeSniffer::getConfigData('installed_paths');
+		//die(debug($x));
 
 		parent::startup();
 	}
@@ -108,9 +113,9 @@ class CsShell extends Shell {
 		//$_SERVER['argv'][] = '--warning-severity=1';
 
 		if (!$customPath) {
-			$ignored = '--ignore=_*,*__*,*/webroot/*,*/Vendor/*';
+			$ignored = '--ignore=_*,*__*,*/webroot/*,*/vendor/*';
 			if (empty($this->params['plugin'])) {
-				$ignored .= ',*/Plugin/*';
+				$ignored .= ',*/plugins/*';
 			}
 			$_SERVER['argv'][] = $ignored;
 		}

@@ -38,8 +38,5 @@
 	},
 	"extra": {
 		"installer-name": "CodeSniffer"
-	},
-	"bin": [
-		"phpmd"
-	]
+	}
 }
