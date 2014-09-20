@@ -30,8 +30,6 @@ class CsShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		Configure::write('debug', true);
-
 		$this->out = new TestCsShellOutput();
 		$io = new ConsoleIo($this->out);
 

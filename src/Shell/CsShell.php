@@ -51,6 +51,7 @@ class CsShell extends Shell {
 		if ($standard = Configure::read('CodeSniffer.standard')) {
 			$this->standard = $standard;
 		}
+		//FIXME: add other ones
 		$this->standard = 'Zend';
 
 		parent::startup();

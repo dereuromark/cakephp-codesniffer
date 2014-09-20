@@ -31,8 +31,6 @@ class MdShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		Configure::write('debug', true);
-
 		$this->out = new TestMdShellOutput();
 		$io = new ConsoleIo($this->out);
 

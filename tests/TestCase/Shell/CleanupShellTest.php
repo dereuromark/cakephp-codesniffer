@@ -29,8 +29,6 @@ class CleanupShellTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		Configure::write('debug', true);
-
 		$this->out = new TestCleanupShellOutput();
 		$io = new ConsoleIo($this->out);
 
