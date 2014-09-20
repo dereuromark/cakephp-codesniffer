@@ -56,7 +56,7 @@ The PHPCS lib is included with a huge amount of available sniffs out of the box:
 It will output a list of issues to your TMP dir.
 By default it uses the CakePHP standard. You can easily adjust it as `-s MyOwnStandard`, though.
 
-If you want to correct the found issues listed, use:
+To correct the found issues listed, use:
 ```bash
 	cake CodeSniffer.Cs run [/some/optional/path] -f
  ```
@@ -67,12 +67,12 @@ Tips:
 - Run it on view files (careful, its only intended to work with PHP class files) with `-e ctp`.
 - Run only specific sniffs with `--sniffs=...`.
 
-If you want to display all available standards, run
+To display all available standards, run
 ```bash
 	cake CodeSniffer.Cs standards
  ```
 
-If you want to compare two sniffs, use
+To compare two sniffs, use
 ```bash
 	cake CodeSniffer.Cs compare [first] [second]
  ```
