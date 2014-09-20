@@ -48,6 +48,33 @@ Possible dependencies see composer.json
    cake CodeSniffer.[ShellName] run [/some/optional/path]
    ```
 
+### PHPCS Auto Fixer
+The PHPCS lib is included with a huge amount of available sniffs out of the box:
+```bash
+	cake CodeSniffer.Cs run [/some/optional/path]
+ ```
+By default it uses the CakePHP standard. You can easily adjust it as `-s MyOwnStandard`, though.
+
+If you want to display all available standards, run
+```bash
+	cake CodeSniffer.Cs standards
+ ```
+
+If you want to compare two sniffs, use
+```bash
+	cake CodeSniffer.Cs compare [first] [second]
+ ```
+If you omit the second one, it will assume you want to compare with the current default standard.
+
+#### Tokenizer
+This CS tool is very useful when writing your own sniffs:
+```bash
+	cake CodeSniffer.Cs tokenize [/path/to/file.ext]
+ ```
+It will tokenize a given PHP file into its PHP tokens, use `-v` verbose output for even more token details.
+The tokenized result will be stored as `.token` file besides your original one.
+
+
 ### PHPMD Mess Detector
 The PHPMD lib is included as the following command:
 ```bash
@@ -79,6 +106,18 @@ Pro-tips:
 
 For details and more tips see [github.com/phpmd/phpmd](https://github.com/phpmd/phpmd).
 
+#### Settings/Options
+
+By default it uses the pre-defined settings.
+You can overwrite the default at runtime or globally using your APP configs:
+```php
+// Use our own ruleset "codesize" as default
+Configure::write('CodeSniffer.ruleset', 'codesize');
+
+// A "custom" ruleset that is somewhere else on your file system
+Configure::write('CodeSniffer.ruleset', '/absolute/path/to/custom.xml');
+```
+
 ### Cleanup
 The Cleanup shell has some nice tools for code cleanup:
 ```bash
@@ -92,20 +131,7 @@ Tips:
 - Use `-v` for more output/infos.
 - To run it on a plugin, use `-p PluginName`.
 
-### PHPCS
-... coming up
 
-### Settings/Options
-
-By default it uses the pre-defined settings.
-You can overwrite the default at runtime or globally using your APP configs:
-```php
-// Use our own ruleset "codesize" as default
-Configure::write('CodeSniffer.ruleset', 'codesize');
-
-// A "custom" ruleset that is somewhere else on your file system
-Configure::write('CodeSniffer.ruleset', '/absolute/path/to/custom.xml');
-```
 
 Same applies for all other config keys.
 
