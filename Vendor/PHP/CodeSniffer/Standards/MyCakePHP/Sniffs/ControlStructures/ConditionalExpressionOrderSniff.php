@@ -30,7 +30,7 @@ class MyCakePHP_Sniffs_ControlStructures_ConditionalExpressionOrderSniff impleme
 	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 
-		// Open paranthesis should come next
+		// Open parenthesis should come next
 		$nextToken = $phpcsFile->findNext(T_OPEN_PARENTHESIS, ($stackPtr + 1));
 		if (!$nextToken) {
 			return;
