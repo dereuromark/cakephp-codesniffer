@@ -80,9 +80,9 @@ class CakePHP_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSn
 					if ($this->_isValidVar($objVarName) === false) {
 						$error = 'Object property "%s" is not in valid camel caps format';
 						$data = array($originalVarName);
-						$phpcsFile->addFixableError($error, $var, 'NotCamelCaps', $data);
+						$phpcsFile->addError($error, $var, 'NotCamelCaps', $data);
 						//$phpcsFile->addFixableError($error, $stackPtr, 'NotCamelCaps', $data);
-						$this->_correct($phpcsFile, $var, $originalVarName);
+						//$this->_correct($phpcsFile, $var, $originalVarName);
 					}
 				}
 			}
@@ -177,8 +177,8 @@ class CakePHP_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSn
 		if ($this->_isValidVar($varName, $public) === false) {
 			$error = 'Member variable "%s" is not in valid camel caps format';
 			$data = array($varName);
-			$phpcsFile->addFixableError($error, $stackPtr, 'MemberVarNotCamelCaps', $data);
-			$this->_correct($phpcsFile, $stackPtr, $varName, '$');
+			$phpcsFile->addError($error, $stackPtr, 'MemberVarNotCamelCaps', $data);
+			//$this->_correct($phpcsFile, $stackPtr, $varName, '$');
 		}
 	}
 
