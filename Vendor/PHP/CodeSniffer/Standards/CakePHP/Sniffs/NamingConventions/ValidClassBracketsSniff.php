@@ -43,7 +43,13 @@ class CakePHP_Sniffs_NamingConventions_ValidClassBracketsSniff implements PHP_Co
 		$found = $phpcsFile->findNext(T_OPEN_CURLY_BRACKET, $stackPtr);
 		if ($tokens[$found - 1]['code'] != T_WHITESPACE) {
 			$error = 'Expected 1 space after class declaration, found 0';
-			$phpcsFile->addError($error, $found - 1, 'InvalidSpacing', array());
+			$fix = $phpcsFile->addError($error, $found - 1, 'InvalidSpacing', array());
+			if (false && $fix === true && $phpcsFile->fixer->enabled === true) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->addContent($found - 1, ' ');
+				$phpcsFile->fixer->endChangeset();
+			}
+
 			return;
 		} elseif ($tokens[$found - 1]['content'] != " ") {
 			$error = 'Expected 1 space before curly opening bracket';
@@ -52,9 +58,13 @@ class CakePHP_Sniffs_NamingConventions_ValidClassBracketsSniff implements PHP_Co
 
 		if (strlen($tokens[$found - 1]['content']) > 1 || $tokens[$found - 2]['code'] == T_WHITESPACE) {
 			$error = 'Expected 1 space after class declaration, found ' . strlen($tokens[$found - 1]['content']);
-			$phpcsFile->addError($error, $found - 1, 'InvalidSpacing', array());
+			$fix = $phpcsFile->addError($error, $found - 1, 'InvalidSpacing', array());
+			if (false && $fix === true && $phpcsFile->fixer->enabled === true) {
+				$phpcsFile->fixer->beginChangeset();
+				$phpcsFile->fixer->replaceToken($found -1, ' ');
+				$phpcsFile->fixer->endChangeset();
+			}
 		}
 	}
 
 }
-
