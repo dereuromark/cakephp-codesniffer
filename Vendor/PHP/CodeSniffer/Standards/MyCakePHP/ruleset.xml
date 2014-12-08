@@ -30,6 +30,7 @@
 	<rule ref="CakePHP.ControlStructures.ControlStructures"/>
 	<rule ref="CakePHP.ControlStructures.ElseIfDeclaration"/>
 	<rule ref="CakePHP.ControlStructures.WhileStructures"/>
+	<rule ref="PSR2.ControlStructures.ControlStructureSpacing"/>
 
 	<rule ref="Zend.Files.ClosingTag"/>
 
