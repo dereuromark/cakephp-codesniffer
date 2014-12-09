@@ -9,6 +9,7 @@
 	<rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
 
 	<rule ref="Squiz.Classes.LowercaseClassKeywords"/>
+	<rule ref="MyCakePHP.Classes.ClassDeclaration"/>
 
 	<rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
 	<rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
@@ -34,6 +35,7 @@
 	<rule ref="CakePHP.ControlStructures.WhileStructures"/>
 	<rule ref="MyCakePHP.ControlStructures.ReturnEarly"/>
 	<rule ref="MyCakePHP.ControlStructures.ConditionalExpressionOrder"/>
+	<rule ref="PSR2.ControlStructures.ControlStructureSpacing"/>
 
 	<rule ref="Zend.Files.ClosingTag"/>
 	<rule ref="MyCakePHP.Files.LineEndings"/>
