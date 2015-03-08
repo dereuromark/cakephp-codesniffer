@@ -78,7 +78,7 @@ class CodeSnifferShell extends AppShell {
 			$this->error('Please provide a valid path.');
 		}
 
-		$_SERVER['argv'] = array();
+		$_SERVER['argv'] = [];
 		$_SERVER['argv'][] = '--encoding=utf8';
 		$standard = $this->standard;
 		if ($this->params['standard']) {
@@ -150,7 +150,7 @@ class CodeSnifferShell extends AppShell {
 			$this->error('Please select a path to a file');
 		}
 
-		$_SERVER['argv'] = array();
+		$_SERVER['argv'] = [];
 		$_SERVER['argv'][] = '--encoding=utf8';
 		$standard = $this->standard;
 		if ($this->params['standard']) {
@@ -161,7 +161,7 @@ class CodeSnifferShell extends AppShell {
 
 		$_SERVER['argc'] = count($_SERVER['argv']);
 
-		$res = array();
+		$res = [];
 
 		$tokens = $this->_getTokens($path);
 		$array = file($path);
@@ -190,7 +190,7 @@ class CodeSnifferShell extends AppShell {
 	protected function _getTokens($path) {
 		include_once('PHP/CodeSniffer.php');
 		$phpcs = new PHP_CodeSniffer();
-		$phpcs->process(array(), $this->standard, array());
+		$phpcs->process([], $this->standard, []);
 
 		$file = $phpcs->processFile($path);
 		$file->start();
@@ -205,7 +205,7 @@ class CodeSnifferShell extends AppShell {
 	 * @return array
 	 */
 	protected function _tokenize($row, $tokens) {
-		$pieces = array();
+		$pieces = [];
 		foreach ($tokens as $key => $token) {
 			if ($token['line'] > $row) {
 				break;
@@ -218,7 +218,7 @@ class CodeSnifferShell extends AppShell {
 				unset($token['type']);
 				unset($token['content']);
 				unset($token['code']);
-				$tokenList = array();
+				$tokenList = [];
 				foreach ($token as $k => $v) {
 					if (is_array($v)) {
 						if (empty($v)) {
@@ -236,7 +236,7 @@ class CodeSnifferShell extends AppShell {
 		if ($this->params['verbose']) {
 			return $pieces;
 		}
-		return array(implode(' ', $pieces));
+		return [implode(' ', $pieces)];
 	}
 
 	/**
@@ -315,7 +315,7 @@ class CodeSnifferShell extends AppShell {
 		$sniffsFrom = $this->_sniffs($from);
 		$sniffsTo = $this->_sniffs($to);
 
-		$both = $onlyFrom = $onlyTo = array();
+		$both = $onlyFrom = $onlyTo = [];
 
 		foreach ($sniffsFrom as $sniff) {
 			if (!in_array($sniff, $sniffsTo)) {
@@ -400,12 +400,12 @@ class CodeSnifferShell extends AppShell {
 	protected function _sniffs($standard) {
 		include_once 'PHP/CodeSniffer.php';
 		$phpcs = new PHP_CodeSniffer();
-		$phpcs->process(array(), $standard);
+		$phpcs->process([], $standard);
 		$sniffs = $phpcs->getSniffs();
 		$sniffs = array_keys($sniffs);
 		sort($sniffs);
 
-		$result = array();
+		$result = [];
 		foreach ($sniffs as $sniff) {
 			$result[] = $this->_formatSniff($sniff);
 		}
@@ -526,11 +526,11 @@ class CodeSnifferShell extends AppShell {
 		//Secure MyCakePHP and MyCakePHPCore rules
 		$subfolder = 'CodeSniffer' . DS . 'Standards' . DS . 'MyCakePHP' . DS;
 		$Folder = new FolderLib($target . $subfolder);
-		$Folder->copy(array('to' => $folder . $subfolder));
+		$Folder->copy(['to' => $folder . $subfolder]);
 
 		$subfolder = 'CodeSniffer' . DS . 'Standards' . DS . 'MyCakePHPCore' . DS;
 		$Folder = new FolderLib($target . $subfolder);
-		$Folder->copy(array('to' => $folder . $subfolder));
+		$Folder->copy(['to' => $folder . $subfolder]);
 
 		// Clear the target folder
 		$Folder = new FolderLib($target);
@@ -538,7 +538,7 @@ class CodeSnifferShell extends AppShell {
 
 		// Move everything over now
 		$Folder = new FolderLib($folder);
-		return $Folder->copy(array('to' => $target));
+		return $Folder->copy(['to' => $target]);
 	}
 
 	/**
@@ -563,7 +563,7 @@ class CodeSnifferShell extends AppShell {
 		$Folder->clear();
 
 		$Folder = new FolderLib($folder);
-		return $Folder->copy(array('to' => $target));
+		return $Folder->copy(['to' => $target]);
 	}
 
 	/**
@@ -599,7 +599,7 @@ class CodeSnifferShell extends AppShell {
 			$this->out('Found cakephp tmp files, skipping re-download.');
 			return true;
 		}
-		$Http = new HttpSocket(array('timeout' => MINUTE, 'ssl_verify_peer' => false, 'ssl_verify_host' => false));
+		$Http = new HttpSocket(['timeout' => MINUTE, 'ssl_verify_peer' => false, 'ssl_verify_host' => false]);
 		$content = $Http->get($url);
 		if ($content->code != 200) {
 			$this->error('Could not download the cakephp rules from ' . $url);
@@ -626,7 +626,7 @@ class CodeSnifferShell extends AppShell {
 			$this->out('Found phpcs tmp files, skipping re-download.');
 			return true;
 		}
-		$Http = new HttpSocket(array('timeout' => MINUTE, 'ssl_verify_peer' => false, 'ssl_verify_host' => false));
+		$Http = new HttpSocket(['timeout' => MINUTE, 'ssl_verify_peer' => false, 'ssl_verify_host' => false]);
 		$content = $Http->get($url);
 		if ($content->code != 200) {
 			$this->error('Could not download the phpcs repo from ' . $url);
@@ -668,7 +668,7 @@ class CodeSnifferShell extends AppShell {
 		$version = $matches[1];
 		$fileUrl = 'http://download.pear.php.net/package/PHP_CodeSniffer-' . $version . '.tgz';
 
-		$Http = new HttpSocket(array('timeout' => MINUTE));
+		$Http = new HttpSocket(['timeout' => MINUTE]);
 		$content = $Http->get($fileUrl);
 		if ($content->code != 200) {
 			$this->error('Could not download the cs package from ' . $fileUrl);
@@ -694,7 +694,7 @@ class CodeSnifferShell extends AppShell {
 		if (extension_loaded('suhosin') && is_numeric(ini_get('suhosin.memory_limit'))) {
 			$limit = ini_get('memory_limit');
 			if (preg_match('(^(\d+)([BKMGT]))', $limit, $match)) {
-				$shift = array('B' => 0, 'K' => 10, 'M' => 20, 'G' => 30, 'T' => 40);
+				$shift = ['B' => 0, 'K' => 10, 'M' => 20, 'G' => 30, 'T' => 40];
 				$limit = ($match[1] * (1 << $shift[$match[2]]));
 			}
 			if (ini_get('suhosin.memory_limit') > $limit && $limit > -1) {
@@ -710,7 +710,7 @@ class CodeSnifferShell extends AppShell {
 			exit(1);
 		}
 
-		$_SERVER['argv'] = array();
+		$_SERVER['argv'] = [];
 		$_SERVER['argv'][] = 'phpcs';
 		$_SERVER['argv'][] = VENDORS . 'PHP' . DS;
 		$_SERVER['argv'][] = 'xml';
@@ -733,7 +733,7 @@ class CodeSnifferShell extends AppShell {
 	 * Offer to install if it isn't available
 	 */
 	protected function _checkCodeSniffer() {
-		$_SERVER['argv'] = array();
+		$_SERVER['argv'] = [];
 		$_SERVER['argv'][] = 'phpcs';
 		$_SERVER['argv'][] = '--version';
 
@@ -760,7 +760,7 @@ class CodeSnifferShell extends AppShell {
 
 			$cliValues['generator'] = '';
 			$cliValues['explain'] = false;
-			$cliValues['reports'] = array('diff' => $diffFile);
+			$cliValues['reports'] = ['diff' => $diffFile];
 
 			if (file_exists($diffFile) === true) {
 				unlink($diffFile);
@@ -781,7 +781,7 @@ class CodeSnifferShell extends AppShell {
 				}
 			} else {
 				$cmd = "patch -p0 -ui \"$diffFile\"";
-				$output = array();
+				$output = [];
 				$retVal = null;
 				exec($cmd, $output, $retVal);
 				unlink($diffFile);
@@ -813,59 +813,59 @@ class CodeSnifferShell extends AppShell {
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 
-		$parser->addOptions(array(
-			'help' => array('short' => 'h', 'boolean' => true),
-			'quiet' => array('short' => 'q', 'boolean' => true),
-			'verbose' => array('short' => 'v', 'boolean' => true),
-			'no-interaction' => array('short' => 'n'),
-			'standard' => array(
+		$parser->addOptions([
+			'help' => ['short' => 'h', 'boolean' => true],
+			'quiet' => ['short' => 'q', 'boolean' => true],
+			'verbose' => ['short' => 'v', 'boolean' => true],
+			'no-interaction' => ['short' => 'n'],
+			'standard' => [
 				'short' => 's',
 				'description' => 'Standard to use (defaults to CakePHP)',
 				'default' => ''
-			),
-			'plugin' => array(
+			],
+			'plugin' => [
 				'short' => 'p',
 				'description' => 'Plugin to use (combined with path subpath of this plugin).',
 				'default' => ''
-			),
-			'ext' => array(
+			],
+			'ext' => [
 				'short' => 'e',
 				'description' => 'Extensions to check (comma separated list). Defaults to php. Use * to allow all extensions.',
 				'default' => ''
-			),
-			'sniffs' => array(
+			],
+			'sniffs' => [
 				'description' => 'Checking files for specific sniffs only (comma separated list). E.g.: Generic.PHP.LowerCaseConstant,CakePHP.WhiteSpace.CommaSpacing',
 				'default' => ''
-			),
-			'fix' => array(
+			],
+			'fix' => [
 				'short' => 'f',
 				'description' => 'Fix right away: Auto-correct errors and warnings where possible.',
 				'boolean' => true
-			),
-		))
-		->addSubcommand('test', array(
+			],
+		])
+		->addSubcommand('test', [
 			'help' => __d('cake_console', 'Test CS and list its installed version.'),
 			//'parser' => $parser
-		))
-		->addSubcommand('standards', array(
+		])
+		->addSubcommand('standards', [
 			'help' => __d('cake_console', 'List available standards and the current default one.'),
 			//'parser' => $parser
-		))
-		->addSubcommand('compare', array(
+		])
+		->addSubcommand('compare', [
 			'help' => __d('cake_console', 'Compare available standards (diff).'),
-		))
-		->addSubcommand('tokenize', array(
+		])
+		->addSubcommand('tokenize', [
 			'help' => __d('cake_console', 'Tokenize file as {filename}.token and store it in the same dir.'),
 			//'parser' => $parser
-		))
-		->addSubcommand('run', array(
+		])
+		->addSubcommand('run', [
 			'help' => __d('cake_console', 'Run CS on the specified path.'),
 			//'parser' => $parser
-		))
-		->addSubcommand('install', array(
+		])
+		->addSubcommand('install', [
 			'help' => __d('cake_console', 'Install/update current CakePHP Sniffs.'),
 			//'parser' => $parser
-		));
+		]);
 
 		return $parser;
 	}

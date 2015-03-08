@@ -15,7 +15,7 @@ class UseStatementSanitizer {
 	public function __construct($file) {
 		$this->content = token_get_all(file_get_contents($file));
 		foreach ($this->content as $key => $val) {
-			if (!is_string($val) || !in_array($val, array('(', ')'))) {
+			if (!is_string($val) || !in_array($val, ['(', ')'])) {
 				continue;
 			}
 
@@ -29,22 +29,22 @@ class UseStatementSanitizer {
 				$i--;
 			}
 
-   		if ($val === '(') {
-   			$val = array(
+		if ($val === '(') {
+			$val = [
 				 	T_OPEN_PARENTHESIS,
 					$val,
 					$line
-				);
-   		}
-   		if ($val === ')') {
-   			$val = array(
+				];
+		}
+		if ($val === ')') {
+			$val = [
 				 	T_CLOSE_PARENTHESIS,
 					$val,
 					$line
-				);
-   		}
+				];
+		}
 
-   		$this->content[$key] = $val;
+		$this->content[$key] = $val;
 		}
 
 		// we don't need and want them while parsing
@@ -60,7 +60,7 @@ class UseStatementSanitizer {
 	public function getUnused() {
 		$uses = $this->getUseStatements();
 		$usages = $this->getUsages();
-		$unused = array();
+		$unused = [];
 
 		foreach ($uses as $use) {
 			if (!in_array($use, $usages)) {
@@ -76,7 +76,7 @@ class UseStatementSanitizer {
 	 * @return array
 	 */
 	public function getUsages() {
-		$usages = array();
+		$usages = [];
 
 		foreach ($this->content as $key => $token) {
 			if (is_string($token)) {
@@ -105,7 +105,7 @@ class UseStatementSanitizer {
 			// for class extensions
 			if ($token[0] == T_EXTENDS || $token[0] == T_IMPLEMENTS) {
 				if ($t[$key + 2][0] != T_NAMESPACE) {
-					$useStatements = $this->_getUseStatements(array($key));
+					$useStatements = $this->_getUseStatements([$key]);
 					$classes = $this->_extractFromUseStatements($useStatements);
 
 					foreach ($classes as $class) {
@@ -171,12 +171,12 @@ class UseStatementSanitizer {
 
 	protected function _extractFromParentheses($start, $end) {
 		if ($end <= $start) {
-			return array();
+			return [];
 		}
 
 		$t = $this->content;
 
-		$classes = array();
+		$classes = [];
 		for ($i = $start; $i <= $end; $i++) {
 			if (is_string($t[$i])) {
 				// comma
@@ -193,7 +193,7 @@ class UseStatementSanitizer {
 	}
 
 	protected function _getTokenUses($tokenKey, $onlyLevel = null) {
-		$tokenUses = array();
+		$tokenUses = [];
 		$level = 0;
 		foreach ($this->content as $key => $token) {
 			// for traits, only first level uses should be captured
@@ -218,7 +218,7 @@ class UseStatementSanitizer {
 	}
 
 	protected function _getUseStatements($tokenUses) {
-		$useStatements = array();
+		$useStatements = [];
 
 		// get rid of uses in lambda functions
 		foreach ($tokenUses as $key => $tokenKey) {
@@ -250,7 +250,7 @@ class UseStatementSanitizer {
 	}
 
 	protected function _extractFromUseStatements($useStatements) {
-		$allUses = array();
+		$allUses = [];
 
 		// get all use statements
 		foreach ($useStatements as $fullStmt) {

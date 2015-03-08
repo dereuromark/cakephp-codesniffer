@@ -32,7 +32,7 @@ class CodeSnifferShellTest extends CakeTestCase {
 			mkdir($folder, 0770, true);
 		}
 		copy($this->CodeSniffer->testPath . 'cs' . DS . 'test.php', $folder . 'test.php');
-		$this->CodeSniffer->args = array($folder . 'test.php');
+		$this->CodeSniffer->args = [$folder . 'test.php'];
 		$this->CodeSniffer->tokenize();
 
 		$this->assertTrue(file_exists($folder . 'test.php.token'));
@@ -40,7 +40,7 @@ class CodeSnifferShellTest extends CakeTestCase {
 		// verbose output
 		$this->CodeSniffer->params['verbose'] = true;
 		copy($this->CodeSniffer->testPath . 'cs' . DS . 'test.php', $folder . 'test2.php');
-		$this->CodeSniffer->args = array($folder . 'test2.php');
+		$this->CodeSniffer->args = [$folder . 'test2.php'];
 		$this->CodeSniffer->tokenize();
 
 		$this->assertTrue(file_exists($folder . 'test2.php.token'));

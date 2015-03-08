@@ -11,9 +11,9 @@ App::uses('UseStatementSanitizer', 'CodeSniffer.Lib');
  */
 class CsShell extends AppShell {
 
-	public $report = array();
+	public $report = [];
 
-	protected $_customPaths = array();
+	protected $_customPaths = [];
 
 	/**
 	 * Welcome message
@@ -38,9 +38,9 @@ class CsShell extends AppShell {
 			$this->_paths = $this->_customPaths;
 		} elseif (!empty($this->params['plugin'])) {
 			$pluginpath = App::pluginPath($this->params['plugin']);
-			$this->_paths = array($pluginpath);
+			$this->_paths = [$pluginpath];
 		} else {
-			$this->_paths = array(APP);
+			$this->_paths = [APP];
 		}
 		$this->_findFiles('php');
 		$this->out(count($this->_files) . ' files');
@@ -77,7 +77,7 @@ class CsShell extends AppShell {
 	 * @return void
 	 */
 	protected function _findFiles($extensions = '') {
-		$this->_files = array();
+		$this->_files = [];
 		foreach ($this->_paths as $path) {
 			if (!is_dir($path)) {
 				continue;
@@ -88,7 +88,7 @@ class CsShell extends AppShell {
 				RegexIterator::MATCH
 			);
 			foreach ($Iterator as $file) {
-				$excludes = array('Vendor', 'vendors');
+				$excludes = ['Vendor', 'vendors'];
 				//Iterator processes plugins/vendors even if not asked to
 				if (empty($this->params['plugin'])) {
 					$excludes[] = 'Plugin';
@@ -119,18 +119,18 @@ class CsShell extends AppShell {
 	public function getOptionParser() {
 		$parser = parent::getOptionParser();
 
-		$parser->addOptions(array(
-			'dry-run' => array(
+		$parser->addOptions([
+			'dry-run' => [
 				'short' => 'd', 'boolean' => true, 'help' => 'Dry Run'
-			),
-			'plugin' => array('short' => 'p', 'help' => 'Plugin', 'default' => ''),
+			],
+			'plugin' => ['short' => 'p', 'help' => 'Plugin', 'default' => ''],
 			//'version' => array('short' => 'V', 'boolean' => true),
-			'no-interaction' => array('short' => 'n')
-		))
-		->addSubcommand('unused_use', array(
+			'no-interaction' => ['short' => 'n']
+		])
+		->addSubcommand('unused_use', [
 			'help' => __d('cake_console', 'Run CS for use statements.'),
 			//'parser' => $parser
-		));
+		]);
 
 		return $parser;
 	}

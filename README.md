@@ -1,8 +1,8 @@
 # CakePHP CodeSniffer Plugin
+[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg)](https://php.net/)
+[![License](https://poser.pugx.org/dereuromark/cakephp-codesniffer/license.png)](https://packagist.org/packages/dereuromark/cakephp-codesniffer)
+[![Total Downloads](https://poser.pugx.org/dereuromark/cakephp-codesniffer/d/total.png)](https://packagist.org/packages/dereuromark/cakephp-codesniffer)
 
-Author: Mark Scherer
-
-License: MIT
 
 The plugin provides a quick way to run your (default) sniffer rules on your app - or part (Plugin for example) of it.
 It comes with good default settings for Cake apps and works out of the box as self-contained system.
