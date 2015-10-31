@@ -31,14 +31,14 @@ class UseStatementSanitizer {
 
 		if ($val === '(') {
 			$val = [
-				 	T_OPEN_PARENTHESIS,
+					T_OPEN_PARENTHESIS,
 					$val,
 					$line
 				];
 		}
 		if ($val === ')') {
 			$val = [
-				 	T_CLOSE_PARENTHESIS,
+					T_CLOSE_PARENTHESIS,
 					$val,
 					$line
 				];
