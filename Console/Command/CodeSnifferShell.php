@@ -101,7 +101,7 @@ class CodeSnifferShell extends AppShell {
 		//$_SERVER['argv'][] = '--warning-severity=1';
 
 		if (!$customPath) {
-			$ignored = '--ignore=_*,*__*,*/webroot/*,*/Vendor/*';
+			$ignored = '--ignore=_*,*__*,*/webroot/*,*/Vendor/*,*/node_modules/*';
 			if (empty($this->params['plugin'])) {
 				$ignored .= ',*/Plugin/*';
 			}
@@ -780,7 +780,7 @@ class CodeSnifferShell extends AppShell {
 					$exit = 2;
 				}
 			} else {
-				$cmd = "patch -p0 -ui \"$diffFile\"";
+				$cmd = "cd / && patch -p0 -ui \"$diffFile\" && cd \"" . APP . "\"";
 				$output = [];
 				$retVal = null;
 				exec($cmd, $output, $retVal);
