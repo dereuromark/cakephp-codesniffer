@@ -780,7 +780,7 @@ class CodeSnifferShell extends AppShell {
 					$exit = 2;
 				}
 			} else {
-				$cmd = "patch -p0 -ui \"$diffFile\"";
+				$cmd = "cd / && patch -p0 -ui \"$diffFile\" && cd \"" . APP . "\"";
 				$output = [];
 				$retVal = null;
 				exec($cmd, $output, $retVal);
