@@ -35,7 +35,7 @@ Possible dependencies:
    ```
    {
      "require" : {
-       "dereuromark/cakephp-codesniffer": "dev-master""
+       "dereuromark/cakephp-codesniffer": "dev-master"
      }
    }
    ```
